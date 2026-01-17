@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Hover trigger area */
+        .hover-zone {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 15px;
+            height: 100%;
+            z-index: 100;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: -220px;
+            top: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #f5f5f5;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.35s ease;
+            padding-top: 40px;
+            z-index: 200;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s, padding-left 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #e0e0e0;
+            padding-left: 35px;
+        }
+
+        /* Main content */
+        .content {
+            padding: 60px;
+        }
+
+        .content h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #555;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hover trigger -->
+    <div class="hover-zone" id="hoverZone"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Navigation</h2>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <h1>Welcome</h1>
+        <p>
+            This is a clean homepage layout with a hidden sidebar navigation.
+            Hover on the left edge of the screen to reveal the menu.
+        </p>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const hoverZone = document.getElementById("hoverZone");
+
+        hoverZone.addEventListener("mouseenter", () => {
+            sidebar.classList.add("active");
+        });
+
+        sidebar.addEventListener("mouseleave", () => {
+            sidebar.classList.remove("active");
+        });
+    </script>
+
+</body>
+</html>

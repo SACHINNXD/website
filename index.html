@@ -22,9 +22,33 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 15px;
+            width: 20px;
             height: 100%;
             z-index: 100;
+        }
+
+        /* Menu icon */
+        .menu-icon {
+            position: fixed;
+            left: 6px;
+            top: 20px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #333;
+            z-index: 300;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        .sidebar.active + .menu-icon {
+            transform: translateX(220px);
+            animation: none;
         }
 
         /* Sidebar */
@@ -96,26 +120,33 @@
         <a href="#">Contact</a>
     </div>
 
+    <!-- Menu icon -->
+    <div class="menu-icon" id="menuIcon">☰</div>
+
     <!-- Main content -->
     <div class="content">
         <h1>Welcome</h1>
         <p>
-            This is a clean homepage layout with a hidden sidebar navigation.
-            Hover on the left edge of the screen to reveal the menu.
+            Hover over the left edge or the menu icon to open the navigation bar.
         </p>
     </div>
 
     <script>
         const sidebar = document.getElementById("sidebar");
         const hoverZone = document.getElementById("hoverZone");
+        const menuIcon = document.getElementById("menuIcon");
 
-        hoverZone.addEventListener("mouseenter", () => {
+        function openSidebar() {
             sidebar.classList.add("active");
-        });
+        }
 
-        sidebar.addEventListener("mouseleave", () => {
+        function closeSidebar() {
             sidebar.classList.remove("active");
-        });
+        }
+
+        hoverZone.addEventListener("mouseenter", openSidebar);
+        menuIcon.addEventListener("mouseenter", openSidebar);
+        sidebar.addEventListener("mouseleave", closeSidebar);
     </script>
 
 </body>

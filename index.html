@@ -74,7 +74,6 @@ svg {
     transition: 0.3s;
     z-index: 1100;
 }
-
 #sideNav.active { left: 0; }
 
 #sideNav a {
@@ -83,10 +82,7 @@ svg {
     text-decoration: none;
     color: #000;
 }
-
-#sideNav a:hover {
-    background: #f2f2f2;
-}
+#sideNav a:hover { background: #f2f2f2; }
 
 /* ========== OVERLAY ========== */
 #overlay {
@@ -107,7 +103,6 @@ svg {
     gap: 18px;
     z-index: 1200;
 }
-
 .top-icons svg {
     width: 20px;
     height: 20px;
@@ -147,7 +142,6 @@ svg {
     padding-top: 100px;
     text-align: center;
 }
-
 .main h2 {
     font-size: 28px;
     margin-bottom: 30px;
@@ -170,7 +164,6 @@ svg {
     padding: 16px;
     transition: 0.3s;
 }
-
 .product-card:hover {
     transform: translateY(-8px);
 }
@@ -186,7 +179,6 @@ svg {
     display: flex;
     gap: 10px;
 }
-
 .product-actions button {
     flex: 1;
     padding: 8px;
@@ -198,7 +190,6 @@ svg {
     background: #000;
     color: #fff;
 }
-
 .view-product {
     background: #f2f2f2;
 }
@@ -234,7 +225,6 @@ svg {
     gap: 8px;
     margin: 12px 0;
 }
-
 .size {
     padding: 6px 10px;
     border: 1px solid #ccc;
@@ -261,7 +251,6 @@ svg {
     transition: 0.3s;
     z-index: 4000;
 }
-
 .toast.show { bottom: 30px; }
 
 .tick {
@@ -291,7 +280,7 @@ svg {
 
 <!-- SIDE NAV -->
 <nav id="sideNav">
-    <a href="#">Home</a>
+    <a href="index.html">Home</a>
     <a href="#">About Us</a>
     <a href="#">Terms</a>
     <a href="#">Track Your Order</a>
@@ -300,14 +289,14 @@ svg {
 
 <!-- TOP ICONS -->
 <div class="top-icons">
-    <!-- Search icon -->
+    <!-- Search -->
     <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
 
-    <!-- Profile -->
-    <a href="login.html">
+    <!-- Profile (UPDATED) -->
+    <a href="#" onclick="goToProfile()">
         <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4"/>
             <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
@@ -424,8 +413,6 @@ svg {
     <span>Item added to the cart</span>
 </div>
 
-<!-- SCRIPT -->
 <script src="script.js"></script>
-
 </body>
 </html>

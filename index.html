@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ---------- Reset ---------- */
 * {
     margin: 0;
     padding: 0;
@@ -16,41 +15,16 @@
 
 body {
     background: #ffffff;
-    height: 100vh;
+    min-height: 100vh;
 }
 
-/* ---------- SVG ---------- */
 svg {
     fill: none;
     stroke: #000;
     stroke-width: 1.8;
 }
 
-/* ---------- Hamburger ---------- */
-.hamburger {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 30px;
-    height: 22px;
-    cursor: pointer;
-    z-index: 1002;
-}
-.hamburger span {
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    background: #000;
-    transition: 0.3s;
-}
-.hamburger span:nth-child(1){top:0}
-.hamburger span:nth-child(2){top:9px}
-.hamburger span:nth-child(3){top:18px}
-.hamburger.active span:nth-child(1){transform:rotate(45deg);top:9px}
-.hamburger.active span:nth-child(2){opacity:0}
-.hamburger.active span:nth-child(3){transform:rotate(-45deg);top:9px}
-
-/* ---------- Top Icons ---------- */
+/* ---------- TOP BAR ---------- */
 .top-icons {
     position: fixed;
     top: 18px;
@@ -65,7 +39,7 @@ svg {
     cursor: pointer;
 }
 
-/* ---------- Search Bar ---------- */
+/* ---------- SEARCH ---------- */
 .search-bar {
     position: fixed;
     top: -45px;
@@ -91,112 +65,155 @@ svg {
     font-size: 18px;
 }
 
-/* ---------- Side Nav ---------- */
-#sideNav {
-    position: fixed;
-    top: 0;
-    left: -260px;
+/* ---------- MAIN CONTENT ---------- */
+.main {
+    padding-top: 100px;
+    text-align: center;
+}
+
+.main h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* ---------- PRODUCT CARD ---------- */
+.product-card {
     width: 260px;
-    height: 100%;
-    background: #fff;
-    box-shadow: 2px 0 10px rgba(0,0,0,.1);
-    padding-top: 80px;
-    transition: 0.3s;
-    z-index: 1001;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    padding: 16px;
+    transition: transform 0.3s ease;
 }
-#sideNav.active { left: 0; }
-#sideNav a {
-    display: block;
-    padding: 15px 30px;
-    text-decoration: none;
-    color: #000;
+.product-card:hover {
+    transform: translateY(-8px);
 }
 
-/* ---------- Overlay ---------- */
-#overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.35);
-    display: none;
-    z-index: 1000;
+.product-img {
+    width: 100%;
+    height: 200px;
+    background: #f2f2f2;
+    border-radius: 10px;
+    margin-bottom: 12px;
 }
-#overlay.active { display: block; }
 
-/* ---------- CART MODAL ---------- */
-#cartOverlay {
+.product-card h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.product-card p {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.product-actions button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.add-cart {
+    background: #000;
+    color: #fff;
+}
+
+.view-product {
+    background: #f2f2f2;
+}
+
+/* ---------- MODALS ---------- */
+.overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(0,0,0,0.45);
     display: none;
     z-index: 2000;
 }
-#cartOverlay.active { display: flex; }
-
-.cart-modal {
-    margin: auto;
-    width: 380px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-}
-
-/* Header */
-.cart-header {
+.overlay.active {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
-.cart-header h3 {
-    font-size: 15px;
-    font-weight: normal;
+
+/* ---------- PRODUCT POPUP ---------- */
+.product-modal {
+    background: #fff;
+    width: 380px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 14px;
+    position: relative;
 }
-.cart-close {
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
     cursor: pointer;
     font-size: 18px;
 }
 
-/* Empty State */
-.cart-empty {
-    text-align: center;
-    padding: 40px 10px;
-    color: #777;
-    font-size: 14px;
+.modal-img {
+    width: 100%;
+    height: 220px;
+    background: #f2f2f2;
+    border-radius: 10px;
+    margin-bottom: 12px;
 }
 
-/* Footer */
-.cart-footer button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
+.sizes {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
 }
-.checkout {
+
+.size {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 13px;
+}
+.size.active {
     background: #000;
     color: #fff;
+    border-color: #000;
 }
-.continue {
-    background: #f2f2f2;
+
+.modal-add {
+    width: 100%;
+    padding: 10px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* ---------- CART ---------- */
+#cartOverlay .product-list {
+    text-align: center;
+    padding: 30px 0;
+    color: #777;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Search -->
+<!-- SEARCH -->
 <div class="search-bar" id="searchBar">
     <input placeholder="Search...">
-    <div class="search-close" id="closeSearch">✕</div>
+    <div class="search-close" onclick="toggleSearch()">✕</div>
 </div>
 
-<!-- Hamburger -->
-<div class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-</div>
-
-<!-- Icons -->
+<!-- TOP ICONS -->
 <div class="top-icons">
-    <svg id="openSearch" viewBox="0 0 24 24">
+    <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
@@ -208,71 +225,80 @@ svg {
         </svg>
     </a>
 
-    <svg id="openCart" viewBox="0 0 24 24">
+    <svg onclick="openCart()" viewBox="0 0 24 24">
         <circle cx="9" cy="21" r="1"/>
         <circle cx="18" cy="21" r="1"/>
         <path d="M1 1h4l2.5 13h11l2-8H6"/>
     </svg>
 </div>
 
-<!-- Side Nav -->
-<nav id="sideNav">
-    <a href="#">Home</a>
-    <a href="#">About Us</a>
-    <a href="#">Terms</a>
-    <a href="#">Track Your Order</a>
-</nav>
+<!-- MAIN -->
+<div class="main">
+    <h2>Mens</h2>
 
-<div id="overlay"></div>
+    <div class="product-card">
+        <div class="product-img"></div>
+        <h3>Classic Mens T-Shirt</h3>
+        <p>₹999</p>
 
-<!-- CART MODAL -->
-<div id="cartOverlay">
-    <div class="cart-modal">
-        <div class="cart-header">
-            <h3>
-                Items: <span id="itemCount">0</span> |
-                Total: ₹<span id="totalPrice">0</span>
-            </h3>
-            <div class="cart-close" id="closeCart">✕</div>
-        </div>
-
-        <div class="cart-empty">
-            Your cart is empty
-        </div>
-
-        <div class="cart-footer">
-            <button class="continue" id="continueShopping">Continue Shopping</button>
+        <div class="product-actions">
+            <button class="add-cart" onclick="addToCart()">Add to Cart</button>
+            <button class="view-product" onclick="openProduct()">View Product</button>
         </div>
     </div>
 </div>
 
+<!-- PRODUCT MODAL -->
+<div class="overlay" id="productOverlay">
+    <div class="product-modal">
+        <div class="modal-close" onclick="closeProduct()">✕</div>
+        <div class="modal-img"></div>
+        <h3>Classic Mens T-Shirt</h3>
+        <p>₹999</p>
+
+        <div class="sizes">
+            <div class="size" onclick="selectSize(this)">S</div>
+            <div class="size" onclick="selectSize(this)">M</div>
+            <div class="size" onclick="selectSize(this)">L</div>
+            <div class="size" onclick="selectSize(this)">XL</div>
+            <div class="size" onclick="selectSize(this)">XXL</div>
+        </div>
+
+        <button class="modal-add" onclick="addToCart()">Add to Cart</button>
+    </div>
+</div>
+
 <script>
-const sideNav = document.getElementById("sideNav");
-const overlay = document.getElementById("overlay");
-const hamburger = document.getElementById("hamburger");
-const searchBar = document.getElementById("searchBar");
-const cartOverlay = document.getElementById("cartOverlay");
+let cartCount = 0;
+let cartTotal = 0;
+const price = 999;
 
-/* Sidebar */
-hamburger.onclick = () => {
-    sideNav.classList.toggle("active");
-    overlay.classList.toggle("active");
-    hamburger.classList.toggle("active");
-};
-overlay.onclick = () => {
-    sideNav.classList.remove("active");
-    overlay.classList.remove("active");
-    hamburger.classList.remove("active");
-};
+function toggleSearch() {
+    document.getElementById("searchBar").classList.toggle("active");
+}
 
-/* Search */
-document.getElementById("openSearch").onclick = () => searchBar.classList.add("active");
-document.getElementById("closeSearch").onclick = () => searchBar.classList.remove("active");
+function openProduct() {
+    document.getElementById("productOverlay").classList.add("active");
+}
 
-/* Cart */
-document.getElementById("openCart").onclick = () => cartOverlay.classList.add("active");
-document.getElementById("closeCart").onclick = () => cartOverlay.classList.remove("active");
-document.getElementById("continueShopping").onclick = () => cartOverlay.classList.remove("active");
+function closeProduct() {
+    document.getElementById("productOverlay").classList.remove("active");
+}
+
+function selectSize(el) {
+    document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
+    el.classList.add("active");
+}
+
+function addToCart() {
+    cartCount++;
+    cartTotal += price;
+    alert("Added to cart");
+}
+
+function openCart() {
+    alert("Cart items: " + cartCount + "\nTotal: ₹" + cartTotal);
+}
 </script>
 
 </body>

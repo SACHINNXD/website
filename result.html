@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+/* ========== RESET ========== */
 * {
     margin: 0;
     padding: 0;
@@ -14,72 +15,153 @@
 }
 
 body {
-    background: #fff;
+    background: #ffffff;
     min-height: 100vh;
 }
 
-/* ===== HEADER ===== */
-.header {
-    padding: 20px;
+/* ========== SVG ICONS ========== */
+svg {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.8;
+}
+
+/* ========== HAMBURGER ========== */
+.hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 1200;
+}
+
+.hamburger span {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: #000;
+    transition: 0.3s;
+}
+
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 9px; }
+.hamburger span:nth-child(3) { top: 18px; }
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg);
+    top: 9px;
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    top: 9px;
+}
+
+/* ========== SIDE NAV ========== */
+#sideNav {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    padding-top: 80px;
+    transition: 0.3s;
+    z-index: 1100;
+}
+
+#sideNav.active { left: 0; }
+
+#sideNav a {
+    display: block;
+    padding: 15px 30px;
+    text-decoration: none;
+    color: #000;
+}
+
+#sideNav a:hover {
+    background: #f2f2f2;
+}
+
+/* ========== OVERLAY ========== */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    z-index: 1000;
+}
+#overlay.active { display: block; }
+
+/* ========== SEARCH BAR (ALWAYS VISIBLE) ========== */
+.search-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 14px 60px 14px 60px;
     border-bottom: 1px solid #ddd;
+    background: #fff;
+    z-index: 900;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    outline: none;
+    border-radius: 6px;
+}
+
+/* ========== HEADER ========== */
+.header {
+    padding: 100px 20px 20px;
+    text-align: center;
 }
 
 .header h2 {
-    font-size: 22px;
+    font-size: 24px;
 }
 
-/* ===== RESULTS GRID ===== */
+/* ========== RESULTS GRID ========== */
 .results {
     max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
+    margin: auto;
+    padding: 0 20px 40px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 24px;
 }
 
-/* ===== PRODUCT CARD ===== */
-.product {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+/* ========== PRODUCT CARD ========== */
+.product-card {
     border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     padding: 16px;
-    transition: .3s;
+    transition: 0.3s;
 }
 
-.product:hover {
-    transform: translateY(-6px);
+.product-card:hover {
+    transform: translateY(-8px);
 }
 
 .product-img {
     height: 180px;
     background: #f2f2f2;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-.product h3 {
-    font-size: 15px;
-    margin-bottom: 6px;
-}
-
-.product p {
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.product button {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    background: #000;
-    color: #fff;
-    cursor: pointer;
-}
-
-/* ===== NO RESULTS ===== */
+/* ========== EMPTY STATE ========== */
 .no-results {
     text-align: center;
-    margin-top: 80px;
+    padding: 80px 0;
     color: #777;
     font-size: 16px;
 }
@@ -88,53 +170,83 @@ body {
 
 <body>
 
-<div class="header">
-    <h2 id="resultTitle"></h2>
+<!-- SEARCH BAR -->
+<div class="search-bar">
+    <input
+        id="searchInput"
+        placeholder="Search products..."
+        onkeydown="handleSearch(event)"
+    >
 </div>
 
+<!-- HAMBURGER -->
+<div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<!-- SIDE NAV -->
+<nav id="sideNav">
+    <a href="index.html">Home</a>
+    <a href="#">About Us</a>
+    <a href="#">Terms</a>
+    <a href="#">Track Your Order</a>
+</nav>
+<div id="overlay" onclick="toggleNav()"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <h2 id="resultTitle">Search Results</h2>
+</div>
+
+<!-- RESULTS -->
 <div id="results" class="results"></div>
 
+<!-- SHARED SCRIPT -->
+<script src="script.js"></script>
+
 <script>
-// ===== PRODUCT DATABASE (same products as index) =====
+/* ========== PRODUCT DATABASE ========== */
 const products = [
-    { id: 1, name: "Classic Mens T-Shirt", price: 999, desc: "Premium cotton t-shirt" },
-    { id: 2, name: "Slim Fit Polo", price: 1299, desc: "Slim fit polo shirt" },
-    { id: 3, name: "Casual Cotton Shirt", price: 1499, desc: "Soft cotton casual shirt" },
-    { id: 4, name: "Oversized Street Tee", price: 1099, desc: "Street style oversized t-shirt" },
-    { id: 5, name: "Denim Blue Shirt", price: 1799, desc: "Denim fabric blue shirt" },
-    { id: 6, name: "Summer Printed Shirt", price: 1199, desc: "Printed summer wear shirt" }
+    { id: 1, name: "Classic Mens T-Shirt", price: 999, desc: "cotton t-shirt" },
+    { id: 2, name: "Slim Fit Polo", price: 1299, desc: "polo shirt" },
+    { id: 3, name: "Casual Cotton Shirt", price: 1499, desc: "cotton shirt" },
+    { id: 4, name: "Oversized Street Tee", price: 1099, desc: "oversized t-shirt" },
+    { id: 5, name: "Denim Blue Shirt", price: 1799, desc: "denim shirt" },
+    { id: 6, name: "Summer Printed Shirt", price: 1199, desc: "printed shirt" }
 ];
 
-// ===== READ QUERY =====
+/* ========== READ QUERY ========== */
 const params = new URLSearchParams(window.location.search);
 const query = params.get("q")?.toLowerCase() || "";
 
-document.getElementById("resultTitle").innerText =
-    `Search results for "${query}"`;
+/* TITLE */
+const titleEl = document.getElementById("resultTitle");
+titleEl.innerText = query ? `Results for "${query}"` : "Search Results";
 
-const resultsDiv = document.getElementById("results");
+/* FILTER */
+const matched = query
+    ? products.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.desc.toLowerCase().includes(query)
+      )
+    : [];
 
-// ===== FILTER LOGIC =====
-const matched = products.filter(p =>
-    p.name.toLowerCase().includes(query) ||
-    p.desc.toLowerCase().includes(query)
-);
+/* RENDER */
+const resultsEl = document.getElementById("results");
 
-// ===== RENDER =====
 if (matched.length === 0) {
-    resultsDiv.innerHTML =
+    resultsEl.innerHTML =
         `<div class="no-results">No products found</div>`;
 } else {
-    matched.forEach(p => {
-        resultsDiv.innerHTML += `
-            <div class="product">
-                <div class="product-img"></div>
-                <h3>${p.name}</h3>
-                <p>₹${p.price}</p>
-                <button>Add to Cart</button>
-            </div>
-        `;
-    });
+    resultsEl.innerHTML = matched.map(p => `
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>${p.name}</h3>
+            <p>₹${p.price}</p>
+        </div>
+    `).join("");
 }
 </script>
 

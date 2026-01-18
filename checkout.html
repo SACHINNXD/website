@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,22 +69,6 @@ body {
     grid-column: span 2;
 }
 
-/* ================= BUTTONS ================= */
-button {
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-}
-
-.primary {
-    background: #000;
-    color: #fff;
-}
-
-.secondary {
-    background: #f2f2f2;
-}
-
 /* ================= PAYMENT ================= */
 .payment-options {
     display: flex;
@@ -98,13 +81,6 @@ button {
     padding: 14px;
     text-align: center;
     cursor: pointer;
-}
-
-/* ================= LOADING ================= */
-.loader {
-    display: none;
-    text-align: center;
-    padding: 30px;
 }
 
 /* ================= MODALS ================= */
@@ -120,10 +96,16 @@ button {
 
 .modal-box {
     background: #fff;
-    width: 360px;
-    padding: 20px;
-    border-radius: 14px;
+    width: 380px;
+    padding: 26px;
+    border-radius: 16px;
     text-align: center;
+}
+
+/* ================= LOADING ================= */
+.loader {
+    padding: 30px;
+    font-size: 15px;
 }
 
 /* ================= QR ================= */
@@ -141,10 +123,57 @@ button {
 }
 
 /* ================= SUCCESS ================= */
-.success {
-    text-align: center;
+.success-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.success-tick {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.success-tick::after {
+    content: "";
+    width: 18px;
+    height: 30px;
+    border-right: 4px solid #fff;
+    border-bottom: 4px solid #fff;
+    transform: rotate(45deg);
+}
+
+.success-text {
     font-size: 20px;
     font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.success-sub {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.success-box button {
+    padding: 10px 18px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+/* ================= ERROR ================= */
+.error-msg {
+    font-size: 15px;
+    margin-bottom: 16px;
 }
 </style>
 </head>
@@ -155,19 +184,24 @@ button {
 
     <h2>Checkout</h2>
 
-    <!-- BILL -->
+    <!-- ORDER SUMMARY -->
     <div class="section">
         <h3>Order Summary</h3>
         <div id="bill"></div>
-        <div class="bill-item"><span>Delivery (Maharashtra)</span><span>₹100</span></div>
-        <div class="bill-total">Total: ₹<span id="total"></span></div>
+        <div class="bill-item">
+            <span>Delivery (Maharashtra)</span>
+            <span>₹100</span>
+        </div>
+        <div class="bill-total">
+            Total: ₹<span id="total"></span>
+        </div>
     </div>
 
     <!-- ADDRESS -->
     <div class="section">
         <h3>Delivery Address</h3>
         <div class="address-grid">
-            <input placeholder="Flat / House No" id="flat">
+            <input placeholder="Flat / House No">
             <input placeholder="Building / Society">
             <input placeholder="Road / Area" class="full">
             <input placeholder="City">
@@ -191,9 +225,7 @@ button {
 
 <!-- LOADING -->
 <div class="modal" id="loading">
-    <div class="modal-box">
-        <p>Processing...</p>
-    </div>
+    <div class="modal-box loader">Processing...</div>
 </div>
 
 <!-- CARD -->
@@ -203,7 +235,9 @@ button {
         <input placeholder="Card Number"><br><br>
         <input placeholder="Expiry"><br><br>
         <input placeholder="CVV"><br><br>
-        <button class="primary" onclick="finalize()">Pay</button>
+        <button onclick="finalize()" style="background:#000;color:#fff;padding:10px;border:none;">
+            Pay
+        </button>
     </div>
 </div>
 
@@ -216,21 +250,34 @@ button {
     </div>
 </div>
 
+<!-- ADDRESS ERROR -->
+<div class="modal" id="addressError">
+    <div class="modal-box">
+        <div class="error-msg">
+            Please fill all address fields to proceed
+        </div>
+        <button onclick="closeAddressError()" style="background:#000;color:#fff;padding:10px;border:none;">
+            OK
+        </button>
+    </div>
+</div>
+
 <!-- SUCCESS -->
 <div class="modal" id="successModal">
-    <div class="modal-box success">
-        Order Placed Successfully 🎉
+    <div class="modal-box success-box">
+        <div class="success-tick"></div>
+        <div class="success-text">Order Placed Successfully</div>
+        <div class="success-sub">Thank you for shopping with us</div>
+        <button onclick="goHome()">Continue Shopping</button>
     </div>
 </div>
 
 <script>
 /* ================= LOGIN CHECK ================= */
 const user = localStorage.getItem("loggedInUser");
-if (!user) {
-    window.location.href = "login.html";
-}
+if (!user) window.location.href = "login.html";
 
-/* ================= CART READ ================= */
+/* ================= CART ================= */
 const cart = JSON.parse(localStorage.getItem("cart")) || [];
 const bill = document.getElementById("bill");
 let subtotal = 0;
@@ -248,16 +295,23 @@ const total = subtotal + 100;
 document.getElementById("total").innerText = total;
 document.getElementById("upiAmount").innerText = total;
 
-/* ================= ADDRESS VALIDATION ================= */
+/* ================= ADDRESS CHECK ================= */
 function addressFilled() {
     return [...document.querySelectorAll(".address-grid input")]
         .every(i => i.value.trim());
 }
 
-/* ================= PAYMENT FLOW ================= */
+function showAddressError() {
+    addressError.style.display = "flex";
+}
+function closeAddressError() {
+    addressError.style.display = "none";
+}
+
+/* ================= PAYMENT ================= */
 function startPayment(type) {
     if (!addressFilled()) {
-        alert("Please fill all address fields");
+        showAddressError();
         return;
     }
 
@@ -265,8 +319,9 @@ function startPayment(type) {
 
     setTimeout(() => {
         loading.style.display = "none";
-        if (type === "card") cardModal.style.display = "flex";
-        else {
+        if (type === "card") {
+            cardModal.style.display = "flex";
+        } else {
             upiModal.style.display = "flex";
             setTimeout(finalize, 34000);
         }
@@ -283,16 +338,17 @@ function finalize() {
         loading.style.display = "none";
         successModal.style.display = "flex";
 
-        // save order
         const orders = JSON.parse(localStorage.getItem("orders")) || {};
         orders[user] = orders[user] || [];
         orders[user].push({ total });
 
         localStorage.setItem("orders", JSON.stringify(orders));
         localStorage.removeItem("cart");
-
-        setTimeout(() => window.location.href = "index.html", 3000);
     }, 3000);
+}
+
+function goHome() {
+    window.location.href = "index.html";
 }
 </script>
 

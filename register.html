@@ -6,75 +6,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: #ffffff;
 }
 
-.box {
-    width: 350px;
+.form-box {
+    width: 360px;
     border: 1px solid #ddd;
-    padding: 25px;
+    padding: 24px;
+    border-radius: 10px;
 }
 
-h2 {
-    margin-bottom: 15px;
+.form-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-input {
+.form-box input {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 12px;
     border: 1px solid #ccc;
+    outline: none;
+}
+
+.password-box {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 13px;
 }
 
 button {
     width: 100%;
     padding: 10px;
+    border: none;
     background: #000;
     color: #fff;
-    border: none;
     cursor: pointer;
 }
 
 .error {
     color: red;
-    font-size: 12px;
-    margin-bottom: 8px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: none;
 }
 
 .switch {
-    text-align: center;
     margin-top: 12px;
+    text-align: center;
     font-size: 13px;
 }
 .switch a {
-    color: #000;
     text-decoration: underline;
+    cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-    <h2>Register</h2>
+<div class="form-box">
+    <h2>Create Account</h2>
 
-    <form id="registerForm">
-        <div class="error" id="registerError"></div>
+    <p class="error" id="errorMsg"></p>
 
-        <input type="text" id="firstName" placeholder="First Name">
-        <input type="text" id="lastName" placeholder="Last Name">
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+    <input id="fname" placeholder="First Name">
+    <input id="lname" placeholder="Last Name">
+    <input id="email" placeholder="Email">
 
-        <button type="submit">Register</button>
-    </form>
+    <div class="password-box">
+        <input id="password" type="password" placeholder="Password">
+        <span class="toggle-eye" onclick="togglePass('password')">👁</span>
+    </div>
+
+    <div class="password-box">
+        <input id="confirm" type="password" placeholder="Confirm Password">
+        <span class="toggle-eye" onclick="togglePass('confirm')">👁</span>
+    </div>
+
+    <button onclick="registerUser()">Register</button>
 
     <div class="switch">
         Already have an account?
@@ -83,46 +112,55 @@ button {
 </div>
 
 <script>
-document.getElementById("registerForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+function togglePass(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
 
-    const first = document.getElementById("firstName").value.trim();
-    const last = document.getElementById("lastName").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const pass = document.getElementById("password").value;
-    const confirm = document.getElementById("confirmPassword").value;
-    const error = document.getElementById("registerError");
+function registerUser() {
+    const fname = fnameInput.value.trim();
+    const lname = lnameInput.value.trim();
+    const email = emailInput.value.trim();
+    const pass = password.value;
+    const confirmPass = confirm.value;
+    const error = document.getElementById("errorMsg");
 
-    error.innerText = "";
-
-    if (!/^[A-Za-z]+$/.test(first)) {
-        error.innerText = "First name must contain only letters";
-        return;
-    }
-
-    if (!/^[A-Za-z]+$/.test(last)) {
-        error.innerText = "Last name must contain only letters";
+    if (!fname || !lname || /\d/.test(fname + lname)) {
+        error.innerText = "Names cannot contain numbers";
+        error.style.display = "block";
         return;
     }
 
     if (!email.includes("@")) {
-        error.innerText = "Invalid email";
+        error.innerText = "Invalid email address";
+        error.style.display = "block";
         return;
     }
 
-    if (pass.length < 6) {
-        error.innerText = "Password must be at least 6 characters";
-        return;
-    }
-
-    if (pass !== confirm) {
+    if (pass !== confirmPass) {
         error.innerText = "Passwords do not match";
+        error.style.display = "block";
         return;
     }
 
-    alert("Registration successful");
-    // window.location.href = "login.html"; // optional redirect
-});
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (users.some(u => u.email === email)) {
+        error.innerText = "Email already registered";
+        error.style.display = "block";
+        return;
+    }
+
+    users.push({ email, password: pass, fname, lname });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    window.location.href = "login.html";
+}
+
+// shorthand
+const fnameInput = document.getElementById("fname");
+const lnameInput = document.getElementById("lname");
+const emailInput = document.getElementById("email");
 </script>
 
 </body>

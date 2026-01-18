@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-box {
+    width: 350px;
+    border: 1px solid #e5e5e5;
+    padding: 25px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 12px;
+    color: #555;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h2>Register</h2>
+
+    <div class="input-group">
+        <label>First Name</label>
+        <input type="text" id="firstName">
+        <div class="error" id="firstNameError"></div>
+    </div>
+
+    <div class="input-group">
+        <label>Last Name</label>
+        <input type="text" id="lastName">
+        <div class="error" id="lastNameError"></div>
+    </div>
+
+    <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email">
+        <div class="error" id="emailError"></div>
+    </div>
+
+    <div class="input-group password-wrapper">
+        <label>Password</label>
+        <input type="password" id="password">
+        <span class="toggle-eye" onclick="togglePassword('password')">Show</span>
+        <div class="error" id="passwordError"></div>
+    </div>
+
+    <div class="input-group password-wrapper">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword">
+        <span class="toggle-eye" onclick="togglePassword('confirmPassword')">Show</span>
+        <div class="error" id="confirmPasswordError"></div>
+    </div>
+
+    <button onclick="validateRegister()">Register</button>
+</div>
+
+<script>
+function togglePassword(id) {
+    const field = document.getElementById(id);
+    field.type = field.type === "password" ? "text" : "password";
+}
+
+function validateRegister() {
+    let valid = true;
+
+    // Clear errors
+    document.querySelectorAll(".error").forEach(e => e.innerText = "");
+
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (!/^[A-Za-z]+$/.test(firstName)) {
+        document.getElementById("firstNameError").innerText = "Only letters allowed";
+        valid = false;
+    }
+
+    if (!/^[A-Za-z]+$/.test(lastName)) {
+        document.getElementById("lastNameError").innerText = "Only letters allowed";
+        valid = false;
+    }
+
+    if (!email.includes("@")) {
+        document.getElementById("emailError").innerText = "Invalid email";
+        valid = false;
+    }
+
+    if (password.length < 6) {
+        document.getElementById("passwordError").innerText = "Minimum 6 characters";
+        valid = false;
+    }
+
+    if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").innerText = "Passwords do not match";
+        valid = false;
+    }
+
+    if (valid) {
+        alert("Registration successful");
+    }
+}
+</script>
+
+</body>
+</html>

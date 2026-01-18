@@ -176,14 +176,8 @@ svg {
     cursor: pointer;
 }
 
-.add-cart {
-    background: #000;
-    color: #fff;
-}
-
-.view-product {
-    background: #f2f2f2;
-}
+.add-cart { background: #000; color: #fff; }
+.view-product { background: #f2f2f2; }
 
 /* ================= MODALS ================= */
 .overlay-modal {
@@ -229,6 +223,32 @@ svg {
     color: #fff;
 }
 
+/* ================= TOAST ================= */
+.toast {
+    position: fixed;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    transition: 0.3s;
+    z-index: 4000;
+}
+.toast.show { bottom: 30px; }
+
+.tick {
+    width: 14px;
+    height: 8px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg);
+}
+
 </style>
 </head>
 
@@ -256,13 +276,11 @@ svg {
 
 <!-- TOP ICONS -->
 <div class="top-icons">
-    <!-- Search -->
     <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
 
-    <!-- Profile -->
     <a href="login.html">
         <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4"/>
@@ -270,7 +288,6 @@ svg {
         </svg>
     </a>
 
-    <!-- Cart (REDIRECT ONLY) -->
     <a href="cart.html">
         <svg viewBox="0 0 24 24">
             <circle cx="9" cy="21" r="1"/>
@@ -290,7 +307,7 @@ svg {
         <p>₹999</p>
 
         <div class="product-actions">
-            <button class="add-cart">Add to Cart</button>
+            <button class="add-cart" onclick="addToCart()">Add to Cart</button>
             <button class="view-product" onclick="openProduct()">View Product</button>
         </div>
     </div>
@@ -304,32 +321,38 @@ svg {
         <p>₹999</p>
 
         <div class="sizes">
+            <div class="size active">M</div>
             <div class="size" onclick="selectSize(this)">S</div>
-            <div class="size" onclick="selectSize(this)">M</div>
             <div class="size" onclick="selectSize(this)">L</div>
             <div class="size" onclick="selectSize(this)">XL</div>
             <div class="size" onclick="selectSize(this)">XXL</div>
         </div>
 
-        <button class="add-cart">Add to Cart</button>
+        <button class="add-cart" onclick="addToCart()">Add to Cart</button>
     </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+    <div class="tick"></div>
+    <span>Item added to the cart</span>
 </div>
 
 <script>
 
-/* NAV */
+/* ================= NAV ================= */
 function toggleNav() {
     sideNav.classList.toggle("active");
     overlay.classList.toggle("active");
     hamburger.classList.toggle("active");
 }
 
-/* SEARCH */
+/* ================= SEARCH ================= */
 function toggleSearch() {
     searchBar.classList.toggle("active");
 }
 
-/* PRODUCT MODAL */
+/* ================= PRODUCT MODAL ================= */
 function openProduct() {
     productOverlay.classList.add("active");
 }
@@ -339,6 +362,43 @@ function closeProduct() {
 function selectSize(el) {
     document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
     el.classList.add("active");
+}
+
+/* ================= ADD TO CART (LOCALSTORAGE) ================= */
+function addToCart() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const selectedSize =
+        document.querySelector(".size.active")?.innerText || "M";
+
+    const product = {
+        id: 1,
+        name: "Classic Mens T-Shirt",
+        description: "Premium cotton t-shirt",
+        size: selectedSize,
+        price: 999,
+        quantity: 1
+    };
+
+    const existing = cart.find(
+        item => item.id === product.id && item.size === product.size
+    );
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showToast();
+}
+
+/* ================= TOAST ================= */
+function showToast() {
+    const t = document.getElementById("toast");
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2000);
 }
 
 </script>

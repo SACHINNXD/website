@@ -1,40 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background: #ffffff;
 }
+
 .box {
     width: 350px;
     border: 1px solid #ddd;
     padding: 25px;
 }
+
+h2 {
+    margin-bottom: 15px;
+}
+
 input {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
+    border: 1px solid #ccc;
 }
+
 button {
     width: 100%;
     padding: 10px;
     background: #000;
     color: #fff;
     border: none;
+    cursor: pointer;
 }
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
 .switch {
     text-align: center;
     margin-top: 12px;
     font-size: 13px;
 }
 .switch a {
-    text-decoration: underline;
     color: #000;
+    text-decoration: underline;
 }
 </style>
 </head>
@@ -43,18 +63,67 @@ button {
 
 <div class="box">
     <h2>Register</h2>
-    <input type="text" placeholder="First Name">
-    <input type="text" placeholder="Last Name">
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
-    <input type="password" placeholder="Confirm Password">
-    <button>Register</button>
+
+    <form id="registerForm">
+        <div class="error" id="registerError"></div>
+
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+
+        <button type="submit">Register</button>
+    </form>
 
     <div class="switch">
         Already have an account?
         <a href="login.html">Login</a>
     </div>
 </div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const first = document.getElementById("firstName").value.trim();
+    const last = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
+    const confirm = document.getElementById("confirmPassword").value;
+    const error = document.getElementById("registerError");
+
+    error.innerText = "";
+
+    if (!/^[A-Za-z]+$/.test(first)) {
+        error.innerText = "First name must contain only letters";
+        return;
+    }
+
+    if (!/^[A-Za-z]+$/.test(last)) {
+        error.innerText = "Last name must contain only letters";
+        return;
+    }
+
+    if (!email.includes("@")) {
+        error.innerText = "Invalid email";
+        return;
+    }
+
+    if (pass.length < 6) {
+        error.innerText = "Password must be at least 6 characters";
+        return;
+    }
+
+    if (pass !== confirm) {
+        error.innerText = "Passwords do not match";
+        return;
+    }
+
+    alert("Registration successful");
+    // window.location.href = "login.html"; // optional redirect
+});
+</script>
 
 </body>
 </html>

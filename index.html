@@ -1,141 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home Page</title>
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+/* Blank white background */
+body {
+    background-color: #ffffff;
+    height: 100vh;
+}
 
-        body {
-            background-color: #ffffff;
-            height: 100vh;
-            overflow-x: hidden;
-        }
+/* Hamburger Icon */
+.hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    cursor: pointer;
+    z-index: 1001;
+}
 
-        /* Thin shadow hint */
-        .edge-shadow {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(
-                to right,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0)
-            );
-            z-index: 90;
-        }
+.hamburger span {
+    display: block;
+    height: 3px;
+    background: #000;
+    margin: 6px 0;
+    border-radius: 2px;
+}
 
-        /* Hover trigger */
-        .hover-zone {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 20px;
-            height: 100%;
-            z-index: 100;
-        }
+/* Side Navigation */
+#sideNav {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 80px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: -220px;
-            top: 0;
-            width: 220px;
-            height: 100%;
-            background-color: #f7f7f7;
-            box-shadow: 2px 0 12px rgba(0,0,0,0.08);
-            transition: left 0.35s ease;
-            padding-top: 40px;
-            z-index: 200;
-        }
+#sideNav ul {
+    list-style: none;
+}
 
-        .sidebar.active {
-            left: 0;
-        }
+#sideNav ul li {
+    margin: 20px 0;
+}
 
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
+#sideNav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-size: 18px;
+    padding: 12px 30px;
+    display: block;
+    transition: background 0.2s;
+}
 
-        .sidebar a {
-            display: block;
-            padding: 15px 25px;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.3s ease, padding-left 0.3s ease;
-        }
+#sideNav ul li a:hover {
+    background: #f2f2f2;
+}
 
-        .sidebar a:hover {
-            background-color: #e5e5e5;
-            padding-left: 35px;
-        }
+/* Overlay */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 999;
+}
 
-        /* Main content */
-        .content {
-            padding: 60px;
-        }
+/* Active States */
+#sideNav.active {
+    left: 0;
+}
 
-        .content h1 {
-            font-size: 36px;
-            margin-bottom: 15px;
-            color: #222;
-        }
-
-        .content p {
-            font-size: 18px;
-            color: #555;
-            max-width: 600px;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Visual hint -->
-    <div class="edge-shadow"></div>
-
-    <!-- Hover trigger -->
-    <div class="hover-zone" id="hoverZone"></div>
-
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <h2>Navigation</h2>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-        <h1>Welcome</h1>
-        <p>
-            A subtle shadow on the left hints at navigation.
-            Hover near the edge to smoothly reveal the sidebar.
-        </p>
-    </div>
-
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const hoverZone = document.getElementById("hoverZone");
-
-        hoverZone.addEventListener("mouseenter", () => {
-            sidebar.classList.add("active");
-        });
-
-        sidebar.addEventListener("mouseleave", () => {
-            sidebar.classList.remove("active");
-        });
-    </script>
-
-</body>
-</html>
+#overlay.active {
+    display: block;
+}

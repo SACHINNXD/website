@@ -176,8 +176,14 @@ svg {
     cursor: pointer;
 }
 
-.add-cart { background: #000; color: #fff; }
-.view-product { background: #f2f2f2; }
+.add-cart {
+    background: #000;
+    color: #fff;
+}
+
+.view-product {
+    background: #f2f2f2;
+}
 
 /* ================= MODALS ================= */
 .overlay-modal {
@@ -198,6 +204,7 @@ svg {
     border-radius: 14px;
     position: relative;
 }
+
 .modal-close {
     position: absolute;
     top: 12px;
@@ -211,6 +218,7 @@ svg {
     gap: 8px;
     margin: 12px 0;
 }
+
 .size {
     padding: 6px 10px;
     border: 1px solid #ccc;
@@ -220,86 +228,6 @@ svg {
     background: #000;
     color: #fff;
 }
-
-/* ================= CART MODAL ================= */
-.cart-modal {
-    background: #ffffff;
-    width: 400px;
-    margin: auto;
-    padding: 18px;
-    border-radius: 14px;
-}
-
-.cart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.cart-close {
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.cart-empty {
-    text-align: center;
-    padding: 30px;
-    color: #777;
-}
-
-.cart-item {
-    display: flex;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.qty {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 8px;
-}
-
-.qty button {
-    width: 26px;
-    height: 26px;
-    border: 1px solid #ccc;
-    background: none;
-    cursor: pointer;
-}
-
-/* ===== FIXED REMOVE BUTTON ===== */
-.remove-btn {
-    margin-left: 10px;
-    padding: 6px 12px;
-    font-size: 12px;
-    border: 1px solid #ccc;
-    background: #f2f2f2;
-    cursor: pointer;
-    line-height: 1;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* ================= TOAST ================= */
-.toast {
-    position: fixed;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #000;
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 8px;
-    display: flex;
-    gap: 8px;
-    transition: 0.3s;
-    z-index: 4000;
-}
-.toast.show { bottom: 30px; }
 
 </style>
 </head>
@@ -328,11 +256,13 @@ svg {
 
 <!-- TOP ICONS -->
 <div class="top-icons">
+    <!-- Search -->
     <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
 
+    <!-- Profile -->
     <a href="login.html">
         <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4"/>
@@ -340,11 +270,14 @@ svg {
         </svg>
     </a>
 
-    <svg onclick="openCart()" viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"/>
-        <circle cx="18" cy="21" r="1"/>
-        <path d="M1 1h4l2.5 13h11l2-8H6"/>
-    </svg>
+    <!-- Cart (REDIRECT ONLY) -->
+    <a href="cart.html">
+        <svg viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="18" cy="21" r="1"/>
+            <path d="M1 1h4l2.5 13h11l2-8H6"/>
+        </svg>
+    </a>
 </div>
 
 <!-- MAIN -->
@@ -357,7 +290,7 @@ svg {
         <p>₹999</p>
 
         <div class="product-actions">
-            <button class="add-cart" onclick="addToCart()">Add to Cart</button>
+            <button class="add-cart">Add to Cart</button>
             <button class="view-product" onclick="openProduct()">View Product</button>
         </div>
     </div>
@@ -378,35 +311,11 @@ svg {
             <div class="size" onclick="selectSize(this)">XXL</div>
         </div>
 
-        <button class="add-cart" onclick="addToCart()">Add to Cart</button>
+        <button class="add-cart">Add to Cart</button>
     </div>
 </div>
-
-<!-- CART MODAL -->
-<div class="overlay-modal" id="cartOverlay">
-    <div class="cart-modal">
-        <div class="cart-header">
-            <span>
-                Items: <span id="itemCount">0</span> |
-                Total: ₹<span id="totalPrice">0</span>
-            </span>
-            <div class="cart-close" onclick="closeCart()">✕</div>
-        </div>
-
-        <div id="cartBody" class="cart-empty">
-            Your cart is empty
-        </div>
-    </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">Item added to cart</div>
 
 <script>
-
-/* ================= STATE ================= */
-let cartQty = 0;
-const price = 999;
 
 /* NAV */
 function toggleNav() {
@@ -420,7 +329,7 @@ function toggleSearch() {
     searchBar.classList.toggle("active");
 }
 
-/* PRODUCT */
+/* PRODUCT MODAL */
 function openProduct() {
     productOverlay.classList.add("active");
 }
@@ -430,62 +339,6 @@ function closeProduct() {
 function selectSize(el) {
     document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
     el.classList.add("active");
-}
-
-/* CART */
-function openCart() {
-    cartOverlay.classList.add("active");
-}
-function closeCart() {
-    cartOverlay.classList.remove("active");
-}
-
-function addToCart() {
-    cartQty++;
-    updateCart();
-    showToast();
-}
-
-function changeQty(v) {
-    cartQty = Math.max(1, cartQty + v);
-    updateCart();
-}
-
-function removeProduct() {
-    cartQty = 0;
-    updateCart();
-}
-
-function updateCart() {
-    itemCount.innerText = cartQty;
-    totalPrice.innerText = cartQty * price;
-
-    if (cartQty === 0) {
-        cartBody.className = "cart-empty";
-        cartBody.innerText = "Your cart is empty";
-    } else {
-        cartBody.className = "";
-        cartBody.innerHTML = `
-            <div class="cart-item">
-                <div>
-                    <h4>Classic Mens T-Shirt</h4>
-                    <p>₹${price}</p>
-                    <div class="qty">
-                        <button onclick="changeQty(-1)">−</button>
-                        <span>${cartQty}</span>
-                        <button onclick="changeQty(1)">+</button>
-                        <button class="remove-btn" onclick="removeProduct()">Remove</button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-}
-
-/* TOAST */
-function showToast() {
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
 }
 
 </script>

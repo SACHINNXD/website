@@ -6,72 +6,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background: #ffffff;
 }
 
-.box {
-    width: 320px;
+.form-box {
+    width: 360px;
     border: 1px solid #ddd;
-    padding: 25px;
+    padding: 24px;
+    border-radius: 10px;
 }
 
-h2 {
-    margin-bottom: 15px;
+.form-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-input {
+.form-box input {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 12px;
     border: 1px solid #ccc;
+    outline: none;
+}
+
+.password-box {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 13px;
 }
 
 button {
     width: 100%;
     padding: 10px;
+    border: none;
     background: #000;
     color: #fff;
-    border: none;
     cursor: pointer;
 }
 
 .error {
     color: red;
-    font-size: 12px;
+    font-size: 13px;
     margin-bottom: 10px;
+    display: none;
 }
 
 .switch {
-    text-align: center;
     margin-top: 12px;
+    text-align: center;
     font-size: 13px;
 }
 .switch a {
-    color: #000;
     text-decoration: underline;
+    cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="form-box">
     <h2>Login</h2>
 
-    <form id="loginForm">
-        <div class="error" id="loginError"></div>
+    <p class="error" id="errorMsg"></p>
 
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginPassword" placeholder="Password">
+    <input id="email" placeholder="Email">
 
-        <button type="submit">Login</button>
-    </form>
+    <div class="password-box">
+        <input id="password" type="password" placeholder="Password">
+        <span class="toggle-eye" onclick="togglePass()">👁</span>
+    </div>
+
+    <button onclick="loginUser()">Login</button>
 
     <div class="switch">
         Haven’t signed up yet?
@@ -80,28 +105,34 @@ button {
 </div>
 
 <script>
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+function togglePass() {
+    password.type = password.type === "password" ? "text" : "password";
+}
 
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
-    const error = document.getElementById("loginError");
+function loginUser() {
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
+    const error = document.getElementById("errorMsg");
 
-    error.innerText = "";
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (!email.includes("@")) {
-        error.innerText = "Invalid email";
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+        error.innerText = "No user found with this email";
+        error.style.display = "block";
         return;
     }
 
-    if (password.length === 0) {
-        error.innerText = "Password is required";
+    if (user.password !== pass) {
+        error.innerText = "Incorrect password";
+        error.style.display = "block";
         return;
     }
 
-    alert("Login successful");
-    // window.location.href = "index.html"; // optional redirect
-});
+    localStorage.setItem("loggedInUser", email);
+    window.location.href = "index.html";
+}
 </script>
 
 </body>

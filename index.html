@@ -20,6 +20,7 @@ body {
     min-height: 100vh;
 }
 
+/* ================= SVG ICONS ================= */
 svg {
     fill: none;
     stroke: #000;
@@ -57,7 +58,7 @@ svg {
     left: -260px;
     width: 260px;
     height: 100%;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 2px 0 10px rgba(0,0,0,.1);
     padding-top: 80px;
     transition: .3s;
@@ -93,15 +94,15 @@ svg {
 }
 .top-icons svg{width:20px;height:20px;cursor:pointer}
 
-/* ================= SEARCH ================= */
+/* ================= SEARCH BAR ================= */
 .search-bar{
     position:fixed;
     top:-45px;
     left:0;
     width:100%;
     height:45px;
-    background:#fff;
-    border-bottom:1px solid #ddd;
+    background:#ffffff;
+    border-bottom:1px solid #dddddd;
     display:flex;
     align-items:center;
     padding:0 16px;
@@ -109,7 +110,11 @@ svg {
     z-index:1300;
 }
 .search-bar.active{top:0}
-.search-bar input{flex:1;border:none;outline:none}
+.search-bar input{
+    flex:1;
+    border:none;
+    outline:none;
+}
 .search-close{cursor:pointer;font-size:18px}
 
 /* ================= MAIN ================= */
@@ -218,9 +223,9 @@ svg {
 
 <body>
 
-<!-- SEARCH -->
+<!-- SEARCH BAR -->
 <div class="search-bar" id="searchBar">
-    <input placeholder="Search...">
+    <input id="searchInput" placeholder="Search..." onkeydown="handleSearch(event)">
     <div class="search-close" onclick="toggleSearch()">✕</div>
 </div>
 
@@ -240,11 +245,13 @@ svg {
 
 <!-- TOP ICONS -->
 <div class="top-icons">
+    <!-- Search -->
     <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
 
+    <!-- Profile -->
     <a href="login.html">
         <svg viewBox="0 0 24 24">
             <circle cx="12" cy="8" r="4"/>
@@ -252,6 +259,7 @@ svg {
         </svg>
     </a>
 
+    <!-- Cart -->
     <a href="cart.html">
         <svg viewBox="0 0 24 24">
             <circle cx="9" cy="21" r="1"/>
@@ -267,7 +275,6 @@ svg {
 
     <div class="products">
 
-        <!-- PRODUCT 1 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Classic Mens T-Shirt</h3>
@@ -278,7 +285,6 @@ svg {
             </div>
         </div>
 
-        <!-- PRODUCT 2 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Slim Fit Polo</h3>
@@ -289,7 +295,6 @@ svg {
             </div>
         </div>
 
-        <!-- PRODUCT 3 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Casual Cotton Shirt</h3>
@@ -297,39 +302,6 @@ svg {
             <div class="product-actions">
                 <button class="add-cart" onclick="addToCart(3,'Casual Cotton Shirt',1499)">Add to Cart</button>
                 <button class="view-product" onclick="openProduct('Casual Cotton Shirt',1499)">View Product</button>
-            </div>
-        </div>
-
-        <!-- PRODUCT 4 -->
-        <div class="product-card">
-            <div class="product-img"></div>
-            <h3>Oversized Street Tee</h3>
-            <p>₹1099</p>
-            <div class="product-actions">
-                <button class="add-cart" onclick="addToCart(4,'Oversized Street Tee',1099)">Add to Cart</button>
-                <button class="view-product" onclick="openProduct('Oversized Street Tee',1099)">View Product</button>
-            </div>
-        </div>
-
-        <!-- PRODUCT 5 -->
-        <div class="product-card">
-            <div class="product-img"></div>
-            <h3>Denim Blue Shirt</h3>
-            <p>₹1799</p>
-            <div class="product-actions">
-                <button class="add-cart" onclick="addToCart(5,'Denim Blue Shirt',1799)">Add to Cart</button>
-                <button class="view-product" onclick="openProduct('Denim Blue Shirt',1799)">View Product</button>
-            </div>
-        </div>
-
-        <!-- PRODUCT 6 -->
-        <div class="product-card">
-            <div class="product-img"></div>
-            <h3>Summer Printed Shirt</h3>
-            <p>₹1199</p>
-            <div class="product-actions">
-                <button class="add-cart" onclick="addToCart(6,'Summer Printed Shirt',1199)">Add to Cart</button>
-                <button class="view-product" onclick="openProduct('Summer Printed Shirt',1199)">View Product</button>
             </div>
         </div>
 
@@ -363,17 +335,29 @@ svg {
 
 <script>
 
-let currentProduct = {};
-
+/* ================= NAV ================= */
 function toggleNav(){
     sideNav.classList.toggle("active");
     overlay.classList.toggle("active");
     hamburger.classList.toggle("active");
 }
 
+/* ================= SEARCH ================= */
 function toggleSearch(){
     searchBar.classList.toggle("active");
 }
+
+function handleSearch(e){
+    if(e.key === "Enter"){
+        const q = e.target.value.trim();
+        if(q){
+            window.location.href = "result.html?q=" + encodeURIComponent(q);
+        }
+    }
+}
+
+/* ================= PRODUCT MODAL ================= */
+let currentProduct = {};
 
 function openProduct(name, price){
     currentProduct = { id: Date.now(), name, price };
@@ -391,6 +375,7 @@ function selectSize(el){
     el.classList.add("active");
 }
 
+/* ================= CART SAVE ================= */
 function addToCart(id, name, price){
     saveToCart(id, name, price);
 }
@@ -408,9 +393,11 @@ function saveToCart(id, name, price){
         found.quantity++;
     } else {
         cart.push({
-            id, name,
+            id,
+            name,
             description: "Premium quality menswear",
-            size, price,
+            size,
+            price,
             quantity: 1
         });
     }
@@ -419,6 +406,7 @@ function saveToCart(id, name, price){
     showToast();
 }
 
+/* ================= TOAST ================= */
 function showToast(){
     toast.classList.add("show");
     setTimeout(()=>toast.classList.remove("show"),2000);

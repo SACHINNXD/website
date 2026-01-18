@@ -19,14 +19,13 @@ body {
     min-height: 100vh;
 }
 
-/* ========== SVG ICONS ========== */
 svg {
     fill: none;
     stroke: #000;
     stroke-width: 1.8;
 }
 
-/* ========== HAMBURGER ========== */
+/* ========== HAMBURGER + SIDE NAV ========== */
 .hamburger {
     position: fixed;
     top: 20px;
@@ -36,59 +35,37 @@ svg {
     cursor: pointer;
     z-index: 1200;
 }
-
 .hamburger span {
     position: absolute;
     width: 100%;
     height: 3px;
     background: #000;
-    transition: 0.3s;
 }
+.hamburger span:nth-child(1){top:0}
+.hamburger span:nth-child(2){top:9px}
+.hamburger span:nth-child(3){top:18px}
 
-.hamburger span:nth-child(1) { top: 0; }
-.hamburger span:nth-child(2) { top: 9px; }
-.hamburger span:nth-child(3) { top: 18px; }
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg);
-    top: 9px;
-}
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg);
-    top: 9px;
-}
-
-/* ========== SIDE NAV ========== */
 #sideNav {
     position: fixed;
     top: 0;
     left: -260px;
     width: 260px;
     height: 100%;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     padding-top: 80px;
-    transition: 0.3s;
+    transition: .3s;
     z-index: 1100;
 }
-
 #sideNav.active { left: 0; }
-
 #sideNav a {
     display: block;
     padding: 15px 30px;
-    text-decoration: none;
     color: #000;
+    text-decoration: none;
 }
+#sideNav a:hover { background: #f2f2f2; }
 
-#sideNav a:hover {
-    background: #f2f2f2;
-}
-
-/* ========== OVERLAY ========== */
 #overlay {
     position: fixed;
     inset: 0;
@@ -98,24 +75,21 @@ svg {
 }
 #overlay.active { display: block; }
 
-/* ========== SEARCH BAR (ALWAYS VISIBLE) ========== */
+/* ========== SEARCH BAR ========== */
 .search-bar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 14px 60px 14px 60px;
+    padding: 14px 60px;
     border-bottom: 1px solid #ddd;
     background: #fff;
     z-index: 900;
 }
-
 .search-bar input {
     width: 100%;
     padding: 10px 14px;
-    font-size: 15px;
     border: 1px solid #ccc;
-    outline: none;
     border-radius: 6px;
 }
 
@@ -125,68 +99,128 @@ svg {
     text-align: center;
 }
 
-.header h2 {
-    font-size: 24px;
-}
-
-/* ========== RESULTS GRID ========== */
+/* ========== RESULTS GRID (AMAZON STYLE) ========== */
 .results {
     max-width: 1100px;
     margin: auto;
     padding: 0 20px 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
 }
 
-/* ========== PRODUCT CARD ========== */
 .product-card {
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    padding: 16px;
-    transition: 0.3s;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: box-shadow .2s;
+    background: #fff;
 }
-
 .product-card:hover {
-    transform: translateY(-8px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
 .product-img {
     height: 180px;
     background: #f2f2f2;
-    border-radius: 10px;
-    margin-bottom: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
-/* ========== EMPTY STATE ========== */
+.product-card h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.product-card p {
+    font-size: 14px;
+}
+
+/* ========== MODAL ========== */
+.overlay-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    z-index: 2000;
+}
+.overlay-modal.active { display: flex; }
+
+.product-modal {
+    background: #fff;
+    width: 380px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 14px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.sizes {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+.size {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.size.active {
+    background: #000;
+    color: #fff;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-cart {
+    background: #000;
+    color: #fff;
+}
+
+.continue {
+    background: #f2f2f2;
+}
+
+/* ========== EMPTY ========== */
 .no-results {
     text-align: center;
     padding: 80px 0;
     color: #777;
-    font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- SEARCH BAR -->
+<!-- SEARCH -->
 <div class="search-bar">
-    <input
-        id="searchInput"
-        placeholder="Search products..."
-        onkeydown="handleSearch(event)"
-    >
+    <input id="searchInput" placeholder="Search products..." onkeydown="handleSearch(event)">
 </div>
 
 <!-- HAMBURGER -->
-<div class="hamburger" id="hamburger" onclick="toggleNav()">
-    <span></span>
-    <span></span>
-    <span></span>
+<div class="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
 </div>
 
-<!-- SIDE NAV -->
 <nav id="sideNav">
     <a href="index.html">Home</a>
     <a href="#">About Us</a>
@@ -195,58 +229,78 @@ svg {
 </nav>
 <div id="overlay" onclick="toggleNav()"></div>
 
-<!-- HEADER -->
 <div class="header">
     <h2 id="resultTitle">Search Results</h2>
 </div>
 
-<!-- RESULTS -->
 <div id="results" class="results"></div>
 
-<!-- SHARED SCRIPT -->
+<!-- PRODUCT MODAL -->
+<div class="overlay-modal" id="productOverlay">
+    <div class="product-modal">
+        <div class="modal-close" onclick="closeProduct()">✕</div>
+        <h3 id="modalName"></h3>
+        <p id="modalDesc"></p>
+        <p id="modalPrice"></p>
+
+        <div class="sizes">
+            <div class="size active">M</div>
+            <div class="size" onclick="selectSize(this)">S</div>
+            <div class="size" onclick="selectSize(this)">L</div>
+            <div class="size" onclick="selectSize(this)">XL</div>
+            <div class="size" onclick="selectSize(this)">XXL</div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="add-cart" onclick="addToCartFromModal()">Add to Cart</button>
+            <button class="continue" onclick="closeProduct()">Continue Shopping</button>
+        </div>
+    </div>
+</div>
+
 <script src="script.js"></script>
 
 <script>
-/* ========== PRODUCT DATABASE ========== */
 const products = [
-    { id: 1, name: "Classic Mens T-Shirt", price: 999, desc: "cotton t-shirt" },
-    { id: 2, name: "Slim Fit Polo", price: 1299, desc: "polo shirt" },
-    { id: 3, name: "Casual Cotton Shirt", price: 1499, desc: "cotton shirt" },
-    { id: 4, name: "Oversized Street Tee", price: 1099, desc: "oversized t-shirt" },
-    { id: 5, name: "Denim Blue Shirt", price: 1799, desc: "denim shirt" },
-    { id: 6, name: "Summer Printed Shirt", price: 1199, desc: "printed shirt" }
+    {id:1,name:"Classic Mens T-Shirt",price:999,desc:"Premium cotton t-shirt"},
+    {id:2,name:"Slim Fit Polo",price:1299,desc:"Slim fit polo shirt"},
+    {id:3,name:"Casual Cotton Shirt",price:1499,desc:"Soft cotton shirt"},
+    {id:4,name:"Oversized Street Tee",price:1099,desc:"Street style tee"},
+    {id:5,name:"Denim Blue Shirt",price:1799,desc:"Denim fabric shirt"},
+    {id:6,name:"Summer Printed Shirt",price:1199,desc:"Printed summer shirt"}
 ];
 
-/* ========== READ QUERY ========== */
-const params = new URLSearchParams(window.location.search);
-const query = params.get("q")?.toLowerCase() || "";
+const q = new URLSearchParams(location.search).get("q")?.toLowerCase() || "";
+document.getElementById("resultTitle").innerText =
+    q ? `Results for "${q}"` : "Search Results";
 
-/* TITLE */
-const titleEl = document.getElementById("resultTitle");
-titleEl.innerText = query ? `Results for "${query}"` : "Search Results";
-
-/* FILTER */
-const matched = query
+const matched = q
     ? products.filter(p =>
-        p.name.toLowerCase().includes(query) ||
-        p.desc.toLowerCase().includes(query)
+        p.name.toLowerCase().includes(q) ||
+        p.desc.toLowerCase().includes(q)
       )
     : [];
 
-/* RENDER */
-const resultsEl = document.getElementById("results");
+const results = document.getElementById("results");
 
-if (matched.length === 0) {
-    resultsEl.innerHTML =
-        `<div class="no-results">No products found</div>`;
+if (!matched.length) {
+    results.innerHTML = `<div class="no-results">No products found</div>`;
 } else {
-    resultsEl.innerHTML = matched.map(p => `
-        <div class="product-card">
+    results.innerHTML = matched.map(p => `
+        <div class="product-card" onclick="openProduct('${p.name}', ${p.price}, '${p.desc}')">
             <div class="product-img"></div>
             <h3>${p.name}</h3>
             <p>₹${p.price}</p>
         </div>
     `).join("");
+}
+
+function openProduct(name, price, desc) {
+    currentProduct = { id: Date.now(), name, price };
+    modalName.innerText = name;
+    modalDesc.innerText = desc;
+    modalPrice.innerText = "₹" + price;
+    productOverlay.classList.add("active");
 }
 </script>
 

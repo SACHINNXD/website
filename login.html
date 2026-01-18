@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-box {
+    width: 320px;
+    border: 1px solid #e5e5e5;
+    padding: 25px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-eye {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-box">
+    <h2>Login</h2>
+
+    <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail">
+        <div class="error" id="loginEmailError"></div>
+    </div>
+
+    <div class="input-group password-wrapper">
+        <label>Password</label>
+        <input type="password" id="loginPassword">
+        <span class="toggle-eye" onclick="togglePassword()">Show</span>
+        <div class="error" id="loginPasswordError"></div>
+    </div>
+
+    <button onclick="validateLogin()">Login</button>
+</div>
+
+<script>
+function togglePassword() {
+    const field = document.getElementById("loginPassword");
+    field.type = field.type === "password" ? "text" : "password";
+}
+
+function validateLogin() {
+    document.getElementById("loginEmailError").innerText = "";
+    document.getElementById("loginPasswordError").innerText = "";
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email.includes("@")) {
+        document.getElementById("loginEmailError").innerText = "Invalid email";
+        return;
+    }
+
+    if (password.length === 0) {
+        document.getElementById("loginPasswordError").innerText = "Password required";
+        return;
+    }
+
+    alert("Login successful");
+}
+</script>
+
+</body>
+</html>

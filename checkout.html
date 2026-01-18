@@ -1,1 +1,300 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+/* ================= CONTAINER ================= */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ================= SECTIONS ================= */
+.section {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.section h3 {
+    margin-bottom: 14px;
+}
+
+/* ================= BILL ================= */
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.bill-total {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* ================= ADDRESS ================= */
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.address-grid input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.address-grid input.full {
+    grid-column: span 2;
+}
+
+/* ================= BUTTONS ================= */
+button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.primary {
+    background: #000;
+    color: #fff;
+}
+
+.secondary {
+    background: #f2f2f2;
+}
+
+/* ================= PAYMENT ================= */
+.payment-options {
+    display: flex;
+    gap: 12px;
+}
+
+.payment-box {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* ================= LOADING ================= */
+.loader {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
+
+/* ================= MODALS ================= */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.modal-box {
+    background: #fff;
+    width: 360px;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+/* ================= QR ================= */
+.qr {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    background: repeating-linear-gradient(
+        45deg,
+        #000,
+        #000 10px,
+        #fff 10px,
+        #fff 20px
+    );
+}
+
+/* ================= SUCCESS ================= */
+.success {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Checkout</h2>
+
+    <!-- BILL -->
+    <div class="section">
+        <h3>Order Summary</h3>
+        <div id="bill"></div>
+        <div class="bill-item"><span>Delivery (Maharashtra)</span><span>₹100</span></div>
+        <div class="bill-total">Total: ₹<span id="total"></span></div>
+    </div>
+
+    <!-- ADDRESS -->
+    <div class="section">
+        <h3>Delivery Address</h3>
+        <div class="address-grid">
+            <input placeholder="Flat / House No" id="flat">
+            <input placeholder="Building / Society">
+            <input placeholder="Road / Area" class="full">
+            <input placeholder="City">
+            <input placeholder="District">
+            <input placeholder="State">
+            <input placeholder="Pincode">
+            <input placeholder="Mobile Number" class="full">
+        </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="section">
+        <h3>Payment</h3>
+        <div class="payment-options">
+            <div class="payment-box" onclick="startPayment('card')">Card</div>
+            <div class="payment-box" onclick="startPayment('upi')">UPI</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- LOADING -->
+<div class="modal" id="loading">
+    <div class="modal-box">
+        <p>Processing...</p>
+    </div>
+</div>
+
+<!-- CARD -->
+<div class="modal" id="cardModal">
+    <div class="modal-box">
+        <h3>Card Payment</h3>
+        <input placeholder="Card Number"><br><br>
+        <input placeholder="Expiry"><br><br>
+        <input placeholder="CVV"><br><br>
+        <button class="primary" onclick="finalize()">Pay</button>
+    </div>
+</div>
+
+<!-- UPI -->
+<div class="modal" id="upiModal">
+    <div class="modal-box">
+        <h3>Scan & Pay</h3>
+        <div class="qr"></div>
+        <p>Amount: ₹<span id="upiAmount"></span></p>
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="modal" id="successModal">
+    <div class="modal-box success">
+        Order Placed Successfully 🎉
+    </div>
+</div>
+
+<script>
+/* ================= LOGIN CHECK ================= */
+const user = localStorage.getItem("loggedInUser");
+if (!user) {
+    window.location.href = "login.html";
+}
+
+/* ================= CART READ ================= */
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const bill = document.getElementById("bill");
+let subtotal = 0;
+
+cart.forEach(i => {
+    subtotal += i.price * i.quantity;
+    bill.innerHTML += `
+        <div class="bill-item">
+            <span>${i.name} x${i.quantity}</span>
+            <span>₹${i.price * i.quantity}</span>
+        </div>`;
+});
+
+const total = subtotal + 100;
+document.getElementById("total").innerText = total;
+document.getElementById("upiAmount").innerText = total;
+
+/* ================= ADDRESS VALIDATION ================= */
+function addressFilled() {
+    return [...document.querySelectorAll(".address-grid input")]
+        .every(i => i.value.trim());
+}
+
+/* ================= PAYMENT FLOW ================= */
+function startPayment(type) {
+    if (!addressFilled()) {
+        alert("Please fill all address fields");
+        return;
+    }
+
+    loading.style.display = "flex";
+
+    setTimeout(() => {
+        loading.style.display = "none";
+        if (type === "card") cardModal.style.display = "flex";
+        else {
+            upiModal.style.display = "flex";
+            setTimeout(finalize, 34000);
+        }
+    }, 4000);
+}
+
+/* ================= FINAL ================= */
+function finalize() {
+    cardModal.style.display = "none";
+    upiModal.style.display = "none";
+    loading.style.display = "flex";
+
+    setTimeout(() => {
+        loading.style.display = "none";
+        successModal.style.display = "flex";
+
+        // save order
+        const orders = JSON.parse(localStorage.getItem("orders")) || {};
+        orders[user] = orders[user] || [];
+        orders[user].push({ total });
+
+        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.removeItem("cart");
+
+        setTimeout(() => window.location.href = "index.html", 3000);
+    }, 3000);
+}
+</script>
+
+</body>
+</html>

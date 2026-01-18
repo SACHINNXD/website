@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Search Results</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #fff;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.header h2 {
+    font-size: 22px;
+}
+
+/* ===== RESULTS GRID ===== */
+.results {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 16px;
+    transition: .3s;
+}
+
+.product:hover {
+    transform: translateY(-6px);
+}
+
+.product-img {
+    height: 180px;
+    background: #f2f2f2;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.product h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.product p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.product button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ===== NO RESULTS ===== */
+.no-results {
+    text-align: center;
+    margin-top: 80px;
+    color: #777;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2 id="resultTitle"></h2>
+</div>
+
+<div id="results" class="results"></div>
+
+<script>
+// ===== PRODUCT DATABASE (same products as index) =====
+const products = [
+    { id: 1, name: "Classic Mens T-Shirt", price: 999, desc: "Premium cotton t-shirt" },
+    { id: 2, name: "Slim Fit Polo", price: 1299, desc: "Slim fit polo shirt" },
+    { id: 3, name: "Casual Cotton Shirt", price: 1499, desc: "Soft cotton casual shirt" },
+    { id: 4, name: "Oversized Street Tee", price: 1099, desc: "Street style oversized t-shirt" },
+    { id: 5, name: "Denim Blue Shirt", price: 1799, desc: "Denim fabric blue shirt" },
+    { id: 6, name: "Summer Printed Shirt", price: 1199, desc: "Printed summer wear shirt" }
+];
+
+// ===== READ QUERY =====
+const params = new URLSearchParams(window.location.search);
+const query = params.get("q")?.toLowerCase() || "";
+
+document.getElementById("resultTitle").innerText =
+    `Search results for "${query}"`;
+
+const resultsDiv = document.getElementById("results");
+
+// ===== FILTER LOGIC =====
+const matched = products.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    p.desc.toLowerCase().includes(query)
+);
+
+// ===== RENDER =====
+if (matched.length === 0) {
+    resultsDiv.innerHTML =
+        `<div class="no-results">No products found</div>`;
+} else {
+    matched.forEach(p => {
+        resultsDiv.innerHTML += `
+            <div class="product">
+                <div class="product-img"></div>
+                <h3>${p.name}</h3>
+                <p>₹${p.price}</p>
+                <button>Add to Cart</button>
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

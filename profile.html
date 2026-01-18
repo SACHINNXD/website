@@ -18,6 +18,14 @@ body {
     min-height: 100vh;
 }
 
+.close-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
 .container {
     max-width: 800px;
     margin: 80px auto;
@@ -30,17 +38,37 @@ body {
     padding: 24px;
 }
 
-.profile-box h2 {
-    margin-bottom: 10px;
-}
-
-.profile-info {
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
     margin-bottom: 30px;
 }
 
+.profile-pic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info h2 {
+    margin-bottom: 6px;
+}
+
 .profile-info p {
-    font-size: 15px;
-    margin: 6px 0;
+    font-size: 14px;
 }
 
 .orders h3 {
@@ -62,7 +90,7 @@ body {
 
 .logout {
     margin-top: 20px;
-    padding: 8px 14px;
+    padding: 10px 16px;
     border: none;
     background: #000;
     color: #fff;
@@ -73,13 +101,22 @@ body {
 
 <body>
 
+<!-- CLOSE -->
+<div class="close-btn" onclick="goHome()">✕</div>
+
 <div class="container">
     <div class="profile-box">
-        <h2>My Profile</h2>
 
-        <div class="profile-info">
-            <p><strong>Name:</strong> <span id="userName"></span></p>
-            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <div class="profile-header">
+            <div class="profile-pic" onclick="uploadPhoto()">
+                <img id="profileImg" src="" alt="" style="display:none;">
+                <span id="defaultIcon">👤</span>
+            </div>
+
+            <div class="profile-info">
+                <h2 id="userName"></h2>
+                <p id="userEmail"></p>
+            </div>
         </div>
 
         <div class="orders">
@@ -91,54 +128,64 @@ body {
     </div>
 </div>
 
+<input type="file" id="photoInput" accept="image/*" hidden>
+
 <script>
-/* ========= AUTH CHECK ========= */
-const loggedInEmail = localStorage.getItem("loggedInUser");
+/* ===== AUTH CHECK ===== */
+const email = localStorage.getItem("loggedInUser");
+if (!email) window.location.href = "login.html";
 
-if (!loggedInEmail) {
-    // ❌ Not logged in → redirect
-    window.location.href = "login.html";
-}
-
-/* ========= LOAD USER ========= */
+/* ===== LOAD USER ===== */
 const users = JSON.parse(localStorage.getItem("users")) || [];
-const user = users.find(u => u.email === loggedInEmail);
+const user = users.find(u => u.email === email);
 
-if (user) {
-    document.getElementById("userName").innerText =
-        user.fname + " " + user.lname;
-    document.getElementById("userEmail").innerText =
-        user.email;
+userName.innerText = user.fname + " " + user.lname;
+userEmail.innerText = user.email;
+
+/* ===== PROFILE IMAGE ===== */
+const savedPhoto = localStorage.getItem("profilePhoto_" + email);
+if (savedPhoto) {
+    profileImg.src = savedPhoto;
+    profileImg.style.display = "block";
+    defaultIcon.style.display = "none";
 }
 
-/* ========= ORDER HISTORY ========= */
-/*
-Later when you implement checkout,
-you’ll push orders into localStorage like:
-orders[email] = [...]
-*/
+function uploadPhoto() {
+    document.getElementById("photoInput").click();
+}
 
-const ordersData = JSON.parse(localStorage.getItem("orders")) || {};
-const userOrders = ordersData[loggedInEmail] || [];
+photoInput.onchange = () => {
+    const file = photoInput.files[0];
+    if (!file) return;
 
-const orderList = document.getElementById("orderList");
+    const reader = new FileReader();
+    reader.onload = () => {
+        localStorage.setItem("profilePhoto_" + email, reader.result);
+        profileImg.src = reader.result;
+        profileImg.style.display = "block";
+        defaultIcon.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+};
 
-if (userOrders.length === 0) {
-    orderList.innerHTML =
-        `<p class="no-orders">No orders placed yet</p>`;
-} else {
-    orderList.innerHTML = userOrders.map((o, i) => `
+/* ===== ORDER HISTORY ===== */
+const orders = JSON.parse(localStorage.getItem("orders")) || {};
+const userOrders = orders[email] || [];
+orderList.innerHTML = userOrders.length
+    ? userOrders.map((o,i)=>`
         <div class="order">
-            <strong>Order #${i + 1}</strong><br>
-            Items: ${o.items}<br>
+            <strong>Order #${i+1}</strong><br>
             Total: ₹${o.total}
-        </div>
-    `).join("");
-}
+        </div>`).join("")
+    : `<p class="no-orders">No orders placed yet</p>`;
 
-/* ========= LOGOUT ========= */
+/* ===== LOGOUT ===== */
 function logout() {
     localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+}
+
+function goHome() {
     window.location.href = "index.html";
 }
 </script>

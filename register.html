@@ -118,25 +118,30 @@ function togglePass(id) {
 }
 
 function registerUser() {
-    const fname = fnameInput.value.trim();
-    const lname = lnameInput.value.trim();
-    const email = emailInput.value.trim();
-    const pass = password.value;
-    const confirmPass = confirm.value;
+    const fname = document.getElementById("fname").value.trim();
+    const lname = document.getElementById("lname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const pass = document.getElementById("password").value;
+    const confirmPass = document.getElementById("confirm").value;
     const error = document.getElementById("errorMsg");
 
+    error.style.display = "none";
+
+    // Name validation
     if (!fname || !lname || /\d/.test(fname + lname)) {
         error.innerText = "Names cannot contain numbers";
         error.style.display = "block";
         return;
     }
 
+    // Email validation
     if (!email.includes("@")) {
         error.innerText = "Invalid email address";
         error.style.display = "block";
         return;
     }
 
+    // Password match validation (FIXED)
     if (pass !== confirmPass) {
         error.innerText = "Passwords do not match";
         error.style.display = "block";
@@ -145,22 +150,24 @@ function registerUser() {
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
+    // Duplicate email check
     if (users.some(u => u.email === email)) {
         error.innerText = "Email already registered";
         error.style.display = "block";
         return;
     }
 
-    users.push({ email, password: pass, fname, lname });
+    users.push({
+        fname,
+        lname,
+        email,
+        password: pass
+    });
+
     localStorage.setItem("users", JSON.stringify(users));
 
     window.location.href = "login.html";
 }
-
-// shorthand
-const fnameInput = document.getElementById("fname");
-const lnameInput = document.getElementById("lname");
-const emailInput = document.getElementById("email");
 </script>
 
 </body>

@@ -1,1 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Cart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+/* ================= PAGE WRAPPER ================= */
+.cart-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ================= HEADER ================= */
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.cart-header h2 {
+    font-size: 26px;
+}
+
+.cart-summary {
+    font-size: 14px;
+    color: #333;
+}
+
+/* ================= CART LIST ================= */
+.cart-list {
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+/* ================= CART ITEM ================= */
+.cart-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-img {
+    width: 100px;
+    height: 100px;
+    background: #f2f2f2;
+    border-radius: 10px;
+}
+
+.cart-details {
+    flex: 1;
+}
+
+.cart-details h4 {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.cart-details p {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.cart-size {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* ================= QUANTITY ================= */
+.cart-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #ccc;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.remove-btn {
+    margin-left: 12px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* ================= EMPTY CART ================= */
+.empty-cart {
+    text-align: center;
+    padding: 60px 0;
+    color: #777;
+    font-size: 15px;
+}
+
+/* ================= FOOTER ================= */
+.cart-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.cart-footer button {
+    padding: 12px 22px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.checkout-btn {
+    background: #000;
+    color: #fff;
+}
+
+.continue-btn {
+    background: #f2f2f2;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="cart-page">
+
+    <!-- HEADER -->
+    <div class="cart-header">
+        <h2>Your Cart</h2>
+        <div class="cart-summary">
+            Items: <span id="totalItems">0</span> |
+            Total: ₹<span id="totalPrice">0</span>
+        </div>
+    </div>
+
+    <!-- CART LIST -->
+    <div id="cartList" class="cart-list"></div>
+
+    <!-- FOOTER -->
+    <div class="cart-footer">
+        <button class="checkout-btn">Checkout</button>
+        <button class="continue-btn" onclick="window.location.href='index.html'">
+            Continue Shopping
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+/* ================= CART DATA =================
+   Example structure in localStorage:
+   [
+     {
+       id: 1,
+       name: "Classic Mens T-Shirt",
+       description: "Premium cotton t-shirt",
+       size: "M",
+       price: 999,
+       quantity: 1
+     }
+   ]
+================================================ */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* ================= RENDER CART ================= */
+function renderCart() {
+    const cartList = document.getElementById("cartList");
+    const totalItemsEl = document.getElementById("totalItems");
+    const totalPriceEl = document.getElementById("totalPrice");
+
+    if (cart.length === 0) {
+        cartList.innerHTML = `<div class="empty-cart">Your cart is empty</div>`;
+        totalItemsEl.innerText = 0;
+        totalPriceEl.innerText = 0;
+        return;
+    }
+
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    cartList.innerHTML = "";
+
+    cart.forEach((item, index) => {
+        totalItems += item.quantity;
+        totalPrice += item.price * item.quantity;
+
+        cartList.innerHTML += `
+            <div class="cart-item">
+                <div class="cart-img"></div>
+
+                <div class="cart-details">
+                    <h4>${item.name}</h4>
+                    <p>${item.description}</p>
+                    <div class="cart-size">Size: ${item.size}</div>
+
+                    <div class="cart-actions">
+                        <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
+                        <span class="qty-value">${item.quantity}</span>
+                        <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    totalItemsEl.innerText = totalItems;
+    totalPriceEl.innerText = totalPrice;
+}
+
+/* ================= ACTIONS ================= */
+function changeQty(index, delta) {
+    cart[index].quantity += delta;
+    if (cart[index].quantity < 1) {
+        cart[index].quantity = 1;
+    }
+    saveCart();
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+}
+
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+/* ================= INIT ================= */
+renderCart();
+
+</script>
+
+</body>
+</html>
 

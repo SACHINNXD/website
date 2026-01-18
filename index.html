@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ---------- Global Reset ---------- */
+/* ---------- Reset ---------- */
 * {
     margin: 0;
     padding: 0;
@@ -15,11 +15,11 @@
 }
 
 body {
-    background: #ffffff;
+    background: #fff;
     height: 100vh;
 }
 
-/* ---------- SVG BASE ---------- */
+/* ---------- SVG ---------- */
 svg {
     fill: none;
     stroke: #000;
@@ -36,7 +36,6 @@ svg {
     cursor: pointer;
     z-index: 1002;
 }
-
 .hamburger span {
     position: absolute;
     width: 100%;
@@ -44,22 +43,12 @@ svg {
     background: #000;
     transition: 0.3s;
 }
-
-.hamburger span:nth-child(1) { top: 0; }
-.hamburger span:nth-child(2) { top: 9px; }
-.hamburger span:nth-child(3) { top: 18px; }
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg);
-    top: 9px;
-}
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg);
-    top: 9px;
-}
+.hamburger span:nth-child(1){top:0}
+.hamburger span:nth-child(2){top:9px}
+.hamburger span:nth-child(3){top:18px}
+.hamburger.active span:nth-child(1){transform:rotate(45deg);top:9px}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg);top:9px}
 
 /* ---------- Top Icons ---------- */
 .top-icons {
@@ -70,133 +59,191 @@ svg {
     gap: 18px;
     z-index: 1002;
 }
-
 .top-icons svg {
     width: 20px;
     height: 20px;
     cursor: pointer;
 }
 
-/* ---------- Search Bar (FIXED) ---------- */
+/* ---------- Search Bar ---------- */
 .search-bar {
     position: fixed;
-    top: -50px;
+    top: -45px;
     left: 0;
     width: 100%;
     height: 45px;
-    background: #ffffff;
-    border-bottom: 1px solid #dddddd;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
     display: flex;
     align-items: center;
     padding: 0 16px;
-    transition: top 0.3s ease;
+    transition: 0.3s;
     z-index: 1003;
 }
-
-.search-bar.active {
-    top: 0;
-}
-
+.search-bar.active { top: 0; }
 .search-bar input {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 14px;
 }
-
-/* Small close button */
 .search-close {
-    font-size: 18px;
     cursor: pointer;
-    padding-left: 10px;
-    user-select: none;
+    font-size: 18px;
 }
 
-/* ---------- Side Navigation ---------- */
+/* ---------- Side Nav ---------- */
 #sideNav {
     position: fixed;
     top: 0;
     left: -260px;
     width: 260px;
     height: 100%;
-    background: #ffffff;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    background: #fff;
+    box-shadow: 2px 0 10px rgba(0,0,0,.1);
     padding-top: 80px;
-    transition: left 0.3s ease;
+    transition: 0.3s;
     z-index: 1001;
 }
-
-#sideNav.active {
-    left: 0;
-}
-
+#sideNav.active { left: 0; }
 #sideNav a {
     display: block;
     padding: 15px 30px;
     text-decoration: none;
     color: #000;
-    font-size: 16px;
-}
-
-#sideNav a:hover {
-    background: #f2f2f2;
 }
 
 /* ---------- Overlay ---------- */
 #overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,.35);
     display: none;
     z-index: 1000;
 }
+#overlay.active { display: block; }
 
-#overlay.active {
-    display: block;
+/* ---------- CART MODAL ---------- */
+#cartOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: none;
+    z-index: 2000;
+}
+#cartOverlay.active { display: flex; }
+
+.cart-modal {
+    margin: auto;
+    width: 380px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+/* Header */
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart-header h3 {
+    font-size: 16px;
+}
+.cart-close {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* Item */
+.cart-item {
+    display: flex;
+    gap: 12px;
+    margin: 18px 0;
+}
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    background: #f2f2f2;
+}
+.cart-info {
+    flex: 1;
+}
+.cart-info h4 {
+    font-size: 14px;
+}
+.cart-info p {
+    font-size: 13px;
+    color: #555;
+}
+
+/* Quantity */
+.qty {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 6px;
+}
+.qty button {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    background: none;
+    cursor: pointer;
+}
+
+/* Footer */
+.cart-footer button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.checkout {
+    background: #000;
+    color: #fff;
+}
+.continue {
+    background: #f2f2f2;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Search Bar -->
+<!-- Search -->
 <div class="search-bar" id="searchBar">
-    <input type="text" placeholder="Search...">
-    <div class="search-close" id="closeSearchBtn">✕</div>
+    <input placeholder="Search...">
+    <div class="search-close" id="closeSearch">✕</div>
 </div>
 
 <!-- Hamburger -->
 <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
 </div>
 
-<!-- Top Right Icons -->
+<!-- Icons -->
 <div class="top-icons">
-    <!-- Search -->
-    <svg id="openSearchBtn" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="16" y1="16" x2="22" y2="22"></line>
+    <svg id="openSearch" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="16" y1="16" x2="22" y2="22"/>
     </svg>
 
-    <!-- Profile -->
     <a href="login.html">
         <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
         </svg>
     </a>
 
-    <!-- Cart -->
-    <svg viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"></circle>
-        <circle cx="18" cy="21" r="1"></circle>
-        <path d="M1 1h4l2.5 13h11l2-8H6"></path>
+    <svg id="openCart" viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="18" cy="21" r="1"/>
+        <path d="M1 1h4l2.5 13h11l2-8H6"/>
     </svg>
 </div>
 
-<!-- Side Navigation -->
+<!-- Side Nav -->
 <nav id="sideNav">
     <a href="#">Home</a>
     <a href="#">About Us</a>
@@ -206,15 +253,44 @@ svg {
 
 <div id="overlay"></div>
 
+<!-- CART MODAL -->
+<div id="cartOverlay">
+    <div class="cart-modal">
+        <div class="cart-header">
+            <h3>Items: <span id="itemCount">1</span> | Total: ₹<span id="totalPrice">999</span></h3>
+            <div class="cart-close" id="closeCart">✕</div>
+        </div>
+
+        <div class="cart-item">
+            <img>
+            <div class="cart-info">
+                <h4>Premium Product</h4>
+                <p>₹999</p>
+                <div class="qty">
+                    <button onclick="changeQty(-1)">−</button>
+                    <span id="qty">1</span>
+                    <button onclick="changeQty(1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-footer">
+            <button class="checkout">Checkout</button>
+            <button class="continue" id="continueShopping">Continue Shopping</button>
+        </div>
+    </div>
+</div>
+
 <script>
 const sideNav = document.getElementById("sideNav");
 const overlay = document.getElementById("overlay");
 const hamburger = document.getElementById("hamburger");
 const searchBar = document.getElementById("searchBar");
-const openSearchBtn = document.getElementById("openSearchBtn");
-const closeSearchBtn = document.getElementById("closeSearchBtn");
+const cartOverlay = document.getElementById("cartOverlay");
 
-/* Sidebar */
+let qty = 1;
+const price = 999;
+
 hamburger.onclick = () => {
     sideNav.classList.toggle("active");
     overlay.classList.toggle("active");
@@ -227,14 +303,19 @@ overlay.onclick = () => {
     hamburger.classList.remove("active");
 };
 
-/* Search */
-openSearchBtn.onclick = () => {
-    searchBar.classList.add("active");
-};
+document.getElementById("openSearch").onclick = () => searchBar.classList.add("active");
+document.getElementById("closeSearch").onclick = () => searchBar.classList.remove("active");
 
-closeSearchBtn.onclick = () => {
-    searchBar.classList.remove("active");
-};
+document.getElementById("openCart").onclick = () => cartOverlay.classList.add("active");
+document.getElementById("closeCart").onclick = () => cartOverlay.classList.remove("active");
+document.getElementById("continueShopping").onclick = () => cartOverlay.classList.remove("active");
+
+function changeQty(val) {
+    qty = Math.max(1, qty + val);
+    document.getElementById("qty").innerText = qty;
+    document.getElementById("itemCount").innerText = qty;
+    document.getElementById("totalPrice").innerText = qty * price;
+}
 </script>
 
 </body>

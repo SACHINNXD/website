@@ -6,8 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
-/* ================= RESET ================= */
+/* ========== RESET ========== */
 * {
     margin: 0;
     padding: 0;
@@ -20,14 +19,14 @@ body {
     min-height: 100vh;
 }
 
-/* ================= SVG ICONS ================= */
+/* ========== SVG ICONS ========== */
 svg {
     fill: none;
     stroke: #000;
     stroke-width: 1.8;
 }
 
-/* ================= HAMBURGER ================= */
+/* ========== HAMBURGER ========== */
 .hamburger {
     position: fixed;
     top: 20px;
@@ -37,6 +36,7 @@ svg {
     cursor: pointer;
     z-index: 1200;
 }
+
 .hamburger span {
     position: absolute;
     width: 100%;
@@ -44,180 +44,233 @@ svg {
     background: #000;
     transition: 0.3s;
 }
-.hamburger span:nth-child(1){top:0}
-.hamburger span:nth-child(2){top:9px}
-.hamburger span:nth-child(3){top:18px}
-.hamburger.active span:nth-child(1){transform:rotate(45deg);top:9px}
-.hamburger.active span:nth-child(2){opacity:0}
-.hamburger.active span:nth-child(3){transform:rotate(-45deg);top:9px}
 
-/* ================= SIDE NAV ================= */
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 9px; }
+.hamburger span:nth-child(3) { top: 18px; }
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg);
+    top: 9px;
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    top: 9px;
+}
+
+/* ========== SIDE NAV ========== */
 #sideNav {
     position: fixed;
     top: 0;
     left: -260px;
     width: 260px;
     height: 100%;
-    background: #ffffff;
-    box-shadow: 2px 0 10px rgba(0,0,0,.1);
+    background: #fff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     padding-top: 80px;
-    transition: .3s;
+    transition: 0.3s;
     z-index: 1100;
 }
-#sideNav.active{left:0}
-#sideNav a{
-    display:block;
-    padding:15px 30px;
-    text-decoration:none;
-    color:#000;
-}
-#sideNav a:hover{background:#f2f2f2}
 
-/* ================= OVERLAY ================= */
-#overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.35);
-    display:none;
-    z-index:1000;
-}
-#overlay.active{display:block}
+#sideNav.active { left: 0; }
 
-/* ================= TOP ICONS ================= */
-.top-icons{
-    position:fixed;
-    top:18px;
-    right:20px;
-    display:flex;
-    gap:18px;
-    z-index:1200;
-}
-.top-icons svg{width:20px;height:20px;cursor:pointer}
-
-/* ================= SEARCH BAR ================= */
-.search-bar{
-    position:fixed;
-    top:-45px;
-    left:0;
-    width:100%;
-    height:45px;
-    background:#ffffff;
-    border-bottom:1px solid #dddddd;
-    display:flex;
-    align-items:center;
-    padding:0 16px;
-    transition:.3s;
-    z-index:1300;
-}
-.search-bar.active{top:0}
-.search-bar input{
-    flex:1;
-    border:none;
-    outline:none;
-}
-.search-close{cursor:pointer;font-size:18px}
-
-/* ================= MAIN ================= */
-.main{
-    padding-top:100px;
-    text-align:center;
-}
-.main h2{font-size:28px;margin-bottom:30px}
-
-/* ================= PRODUCTS GRID ================= */
-.products{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:24px;
-    max-width:1100px;
-    margin:auto;
-    padding:0 20px;
+#sideNav a {
+    display: block;
+    padding: 15px 30px;
+    text-decoration: none;
+    color: #000;
 }
 
-/* ================= PRODUCT CARD ================= */
-.product-card{
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    padding:16px;
-    transition:.3s;
-}
-.product-card:hover{transform:translateY(-8px)}
-.product-img{
-    height:200px;
-    background:#f2f2f2;
-    border-radius:10px;
-    margin-bottom:12px;
-}
-.product-actions{
-    display:flex;
-    gap:10px;
-}
-.product-actions button{
-    flex:1;
-    padding:8px;
-    border:none;
-    cursor:pointer;
-}
-.add-cart{background:#000;color:#fff}
-.view-product{background:#f2f2f2}
-
-/* ================= MODAL ================= */
-.overlay-modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    display:none;
-    z-index:2000;
-}
-.overlay-modal.active{display:flex}
-
-.product-modal{
-    background:#fff;
-    width:380px;
-    margin:auto;
-    padding:20px;
-    border-radius:14px;
-    position:relative;
-}
-.modal-close{
-    position:absolute;
-    top:12px;
-    right:14px;
-    cursor:pointer;
-}
-.sizes{display:flex;gap:8px;margin:12px 0}
-.size{
-    padding:6px 10px;
-    border:1px solid #ccc;
-    cursor:pointer;
-}
-.size.active{background:#000;color:#fff}
-
-/* ================= TOAST ================= */
-.toast{
-    position:fixed;
-    bottom:-60px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#000;
-    color:#fff;
-    padding:10px 18px;
-    border-radius:8px;
-    display:flex;
-    gap:8px;
-    align-items:center;
-    transition:.3s;
-    z-index:4000;
-}
-.toast.show{bottom:30px}
-.tick{
-    width:14px;
-    height:8px;
-    border-left:2px solid #fff;
-    border-bottom:2px solid #fff;
-    transform:rotate(-45deg);
+#sideNav a:hover {
+    background: #f2f2f2;
 }
 
+/* ========== OVERLAY ========== */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    z-index: 1000;
+}
+#overlay.active { display: block; }
+
+/* ========== TOP ICONS ========== */
+.top-icons {
+    position: fixed;
+    top: 18px;
+    right: 20px;
+    display: flex;
+    gap: 18px;
+    z-index: 1200;
+}
+
+.top-icons svg {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* ========== SEARCH BAR ========== */
+.search-bar {
+    position: fixed;
+    top: -45px;
+    left: 0;
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    transition: 0.3s;
+    z-index: 1300;
+}
+.search-bar.active { top: 0; }
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+}
+
+.search-close {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* ========== MAIN ========== */
+.main {
+    padding-top: 100px;
+    text-align: center;
+}
+
+.main h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* ========== PRODUCTS GRID ========== */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+/* ========== PRODUCT CARD ========== */
+.product-card {
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    padding: 16px;
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+}
+
+.product-img {
+    height: 200px;
+    background: #f2f2f2;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.product-actions button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-cart {
+    background: #000;
+    color: #fff;
+}
+
+.view-product {
+    background: #f2f2f2;
+}
+
+/* ========== MODAL ========== */
+.overlay-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    z-index: 2000;
+}
+.overlay-modal.active { display: flex; }
+
+.product-modal {
+    background: #fff;
+    width: 380px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 14px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    cursor: pointer;
+}
+
+.sizes {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.size {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.size.active {
+    background: #000;
+    color: #fff;
+}
+
+/* ========== TOAST ========== */
+.toast {
+    position: fixed;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    transition: 0.3s;
+    z-index: 4000;
+}
+
+.toast.show { bottom: 30px; }
+
+.tick {
+    width: 14px;
+    height: 8px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg);
+}
 </style>
 </head>
 
@@ -231,7 +284,9 @@ svg {
 
 <!-- HAMBURGER -->
 <div class="hamburger" id="hamburger" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+    <span></span>
+    <span></span>
+    <span></span>
 </div>
 
 <!-- SIDE NAV -->
@@ -245,7 +300,7 @@ svg {
 
 <!-- TOP ICONS -->
 <div class="top-icons">
-    <!-- Search -->
+    <!-- Search icon -->
     <svg onclick="toggleSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16" y1="16" x2="22" y2="22"/>
@@ -275,6 +330,7 @@ svg {
 
     <div class="products">
 
+        <!-- PRODUCT 1 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Classic Mens T-Shirt</h3>
@@ -285,6 +341,7 @@ svg {
             </div>
         </div>
 
+        <!-- PRODUCT 2 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Slim Fit Polo</h3>
@@ -295,6 +352,7 @@ svg {
             </div>
         </div>
 
+        <!-- PRODUCT 3 -->
         <div class="product-card">
             <div class="product-img"></div>
             <h3>Casual Cotton Shirt</h3>
@@ -302,6 +360,39 @@ svg {
             <div class="product-actions">
                 <button class="add-cart" onclick="addToCart(3,'Casual Cotton Shirt',1499)">Add to Cart</button>
                 <button class="view-product" onclick="openProduct('Casual Cotton Shirt',1499)">View Product</button>
+            </div>
+        </div>
+
+        <!-- PRODUCT 4 -->
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>Oversized Street Tee</h3>
+            <p>₹1099</p>
+            <div class="product-actions">
+                <button class="add-cart" onclick="addToCart(4,'Oversized Street Tee',1099)">Add to Cart</button>
+                <button class="view-product" onclick="openProduct('Oversized Street Tee',1099)">View Product</button>
+            </div>
+        </div>
+
+        <!-- PRODUCT 5 -->
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>Denim Blue Shirt</h3>
+            <p>₹1799</p>
+            <div class="product-actions">
+                <button class="add-cart" onclick="addToCart(5,'Denim Blue Shirt',1799)">Add to Cart</button>
+                <button class="view-product" onclick="openProduct('Denim Blue Shirt',1799)">View Product</button>
+            </div>
+        </div>
+
+        <!-- PRODUCT 6 -->
+        <div class="product-card">
+            <div class="product-img"></div>
+            <h3>Summer Printed Shirt</h3>
+            <p>₹1199</p>
+            <div class="product-actions">
+                <button class="add-cart" onclick="addToCart(6,'Summer Printed Shirt',1199)">Add to Cart</button>
+                <button class="view-product" onclick="openProduct('Summer Printed Shirt',1199)">View Product</button>
             </div>
         </div>
 
@@ -333,86 +424,8 @@ svg {
     <span>Item added to the cart</span>
 </div>
 
-<script>
-
-/* ================= NAV ================= */
-function toggleNav(){
-    sideNav.classList.toggle("active");
-    overlay.classList.toggle("active");
-    hamburger.classList.toggle("active");
-}
-
-/* ================= SEARCH ================= */
-function toggleSearch(){
-    searchBar.classList.toggle("active");
-}
-
-function handleSearch(e){
-    if(e.key === "Enter"){
-        const q = e.target.value.trim();
-        if(q){
-            window.location.href = "result.html?q=" + encodeURIComponent(q);
-        }
-    }
-}
-
-/* ================= PRODUCT MODAL ================= */
-let currentProduct = {};
-
-function openProduct(name, price){
-    currentProduct = { id: Date.now(), name, price };
-    modalName.innerText = name;
-    modalPrice.innerText = "₹" + price;
-    productOverlay.classList.add("active");
-}
-
-function closeProduct(){
-    productOverlay.classList.remove("active");
-}
-
-function selectSize(el){
-    document.querySelectorAll(".size").forEach(s=>s.classList.remove("active"));
-    el.classList.add("active");
-}
-
-/* ================= CART SAVE ================= */
-function addToCart(id, name, price){
-    saveToCart(id, name, price);
-}
-
-function addToCartFromModal(){
-    saveToCart(currentProduct.id, currentProduct.name, currentProduct.price);
-}
-
-function saveToCart(id, name, price){
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const size = document.querySelector(".size.active")?.innerText || "M";
-
-    const found = cart.find(p => p.id === id && p.size === size);
-    if(found){
-        found.quantity++;
-    } else {
-        cart.push({
-            id,
-            name,
-            description: "Premium quality menswear",
-            size,
-            price,
-            quantity: 1
-        });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    showToast();
-}
-
-/* ================= TOAST ================= */
-function showToast(){
-    toast.classList.add("show");
-    setTimeout(()=>toast.classList.remove("show"),2000);
-}
-
-</script>
+<!-- SCRIPT -->
+<script src="script.js"></script>
 
 </body>
 </html>

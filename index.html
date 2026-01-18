@@ -18,7 +18,7 @@ body {
     height: 100vh;
 }
 
-/* Hamburger */
+/* ---------------- Hamburger ---------------- */
 .hamburger {
     position: fixed;
     top: 20px;
@@ -26,7 +26,7 @@ body {
     width: 30px;
     height: 22px;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 1002;
 }
 
 .hamburger span {
@@ -56,14 +56,14 @@ body {
     top: 9px;
 }
 
-/* Top Right Icons */
+/* ---------------- Top Right Icons ---------------- */
 .top-icons {
     position: fixed;
     top: 18px;
     right: 20px;
     display: flex;
     gap: 18px;
-    z-index: 1001;
+    z-index: 1002;
 }
 
 .top-icons svg {
@@ -81,7 +81,47 @@ body {
     transform: scale(1.1);
 }
 
-/* Side Nav */
+/* ---------------- Search Bar ---------------- */
+.search-bar {
+    position: fixed;
+    top: -60px;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    transition: top 0.3s ease;
+    z-index: 1003;
+}
+
+.search-bar.active {
+    top: 0;
+}
+
+.search-bar svg {
+    width: 18px;
+    height: 18px;
+    stroke: #000;
+    stroke-width: 1.8;
+    fill: none;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-close {
+    cursor: pointer;
+}
+
+/* ---------------- Side Nav ---------------- */
 #sideNav {
     position: fixed;
     top: 0;
@@ -92,7 +132,7 @@ body {
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     padding-top: 80px;
     transition: left 0.3s ease;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 #sideNav.active {
@@ -115,13 +155,13 @@ body {
     background: #f2f2f2;
 }
 
-/* Overlay */
+/* ---------------- Overlay ---------------- */
 #overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.3);
     display: none;
-    z-index: 999;
+    z-index: 1000;
 }
 
 #overlay.active {
@@ -132,6 +172,23 @@ body {
 
 <body>
 
+<!-- Search Bar -->
+<div class="search-bar" id="searchBar">
+    <!-- Search Icon -->
+    <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="16.5" y1="16.5" x2="22" y2="22"></line>
+    </svg>
+
+    <input type="text" placeholder="Search..." />
+
+    <!-- Close Icon -->
+    <svg class="search-close" onclick="closeSearch()" viewBox="0 0 24 24">
+        <line x1="4" y1="4" x2="20" y2="20"></line>
+        <line x1="20" y1="4" x2="4" y2="20"></line>
+    </svg>
+</div>
+
 <!-- Hamburger -->
 <div class="hamburger" id="hamburger" onclick="toggleNav()">
     <span></span>
@@ -141,19 +198,19 @@ body {
 
 <!-- Top Right Icons -->
 <div class="top-icons">
-    <!-- Search Icon -->
-    <svg viewBox="0 0 24 24">
+    <!-- Search -->
+    <svg onclick="openSearch()" viewBox="0 0 24 24">
         <circle cx="11" cy="11" r="7"></circle>
         <line x1="16.5" y1="16.5" x2="22" y2="22"></line>
     </svg>
 
-    <!-- Account Icon -->
+    <!-- Account -->
     <svg viewBox="0 0 24 24">
         <circle cx="12" cy="8" r="4"></circle>
         <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
     </svg>
 
-    <!-- Cart Icon -->
+    <!-- Cart -->
     <svg viewBox="0 0 24 24">
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="18" cy="21" r="1"></circle>
@@ -178,6 +235,14 @@ function toggleNav() {
     document.getElementById("sideNav").classList.toggle("active");
     document.getElementById("overlay").classList.toggle("active");
     document.getElementById("hamburger").classList.toggle("active");
+}
+
+function openSearch() {
+    document.getElementById("searchBar").classList.add("active");
+}
+
+function closeSearch() {
+    document.getElementById("searchBar").classList.remove("active");
 }
 </script>
 

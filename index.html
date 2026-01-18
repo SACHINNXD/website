@@ -1,87 +1,33 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-/* Blank white background */
-body {
-    background-color: #ffffff;
-    height: 100vh;
-}
+    <!-- Hamburger Menu -->
+    <div class="hamburger" onclick="toggleNav()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-/* Hamburger Icon */
-.hamburger {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 30px;
-    cursor: pointer;
-    z-index: 1001;
-}
+    <!-- Side Navigation -->
+    <nav id="sideNav">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Track Your Order</a></li>
+        </ul>
+    </nav>
 
-.hamburger span {
-    display: block;
-    height: 3px;
-    background: #000;
-    margin: 6px 0;
-    border-radius: 2px;
-}
+    <!-- Overlay -->
+    <div id="overlay" onclick="toggleNav()"></div>
 
-/* Side Navigation */
-#sideNav {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    width: 260px;
-    height: 100%;
-    background: #ffffff;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    padding-top: 80px;
-    transition: left 0.3s ease;
-    z-index: 1000;
-}
-
-#sideNav ul {
-    list-style: none;
-}
-
-#sideNav ul li {
-    margin: 20px 0;
-}
-
-#sideNav ul li a {
-    text-decoration: none;
-    color: #000;
-    font-size: 18px;
-    padding: 12px 30px;
-    display: block;
-    transition: background 0.2s;
-}
-
-#sideNav ul li a:hover {
-    background: #f2f2f2;
-}
-
-/* Overlay */
-#overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    display: none;
-    z-index: 999;
-}
-
-/* Active States */
-#sideNav.active {
-    left: 0;
-}
-
-#overlay.active {
-    display: block;
-}
+    <script src="script.js"></script>
+</body>
+</html>

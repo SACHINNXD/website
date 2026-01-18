@@ -35,7 +35,9 @@ function closeProduct() {
 }
 
 function selectSize(el) {
-    document.querySelectorAll(".size").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".size").forEach(s =>
+        s.classList.remove("active")
+    );
     el.classList.add("active");
 }
 
@@ -45,12 +47,17 @@ function addToCart(id, name, price) {
 }
 
 function addToCartFromModal() {
-    saveToCart(currentProduct.id, currentProduct.name, currentProduct.price);
+    saveToCart(
+        currentProduct.id,
+        currentProduct.name,
+        currentProduct.price
+    );
 }
 
 function saveToCart(id, name, price) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const size = document.querySelector(".size.active")?.innerText || "M";
+    const size =
+        document.querySelector(".size.active")?.innerText || "M";
 
     const found = cart.find(p => p.id === id && p.size === size);
 
@@ -73,6 +80,7 @@ function saveToCart(id, name, price) {
 
 /* ================= TOAST ================= */
 function showToast() {
+    if (typeof toast === "undefined") return;
     toast.classList.add("show");
     setTimeout(() => toast.classList.remove("show"), 2000);
 }
@@ -86,3 +94,29 @@ function goToProfile() {
         window.location.href = "login.html";
     }
 }
+
+/* ================= PROFILE ICON IMAGE (HOME + RESULT) ================= */
+(function () {
+    const email = localStorage.getItem("loggedInUser");
+    if (!email) return;
+
+    const photo = localStorage.getItem("profilePhoto_" + email);
+    if (!photo) return;
+
+    // find profile svg (second icon)
+    const profileLink = document.querySelector(
+        '.top-icons a[onclick="goToProfile()"]'
+    );
+
+    if (!profileLink) return;
+
+    profileLink.innerHTML = `
+        <img src="${photo}"
+             style="
+                width:20px;
+                height:20px;
+                border-radius:50%;
+                object-fit:cover;
+             ">
+    `;
+})();
